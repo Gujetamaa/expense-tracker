@@ -1,82 +1,66 @@
-// Philippine SSS Contribution Rates for 2024
-// Based on monthly salary ranges
-export const SSS_CONTRIBUTION_TABLE = [
-  { minSalary: 0, maxSalary: 999.99, employeeRate: 0.03, employerRate: 0.08 },
-  { minSalary: 1000, maxSalary: 1249.99, employeeRate: 0.03, employerRate: 0.08 },
-  { minSalary: 1250, maxSalary: 1499.99, employeeRate: 0.03, employerRate: 0.08 },
-  { minSalary: 1500, maxSalary: 1749.99, employeeRate: 0.03, employerRate: 0.08 },
-  { minSalary: 1750, maxSalary: 1999.99, employeeRate: 0.03, employerRate: 0.08 },
-  { minSalary: 2000, maxSalary: 2249.99, employeeRate: 0.04, employerRate: 0.08 },
-  { minSalary: 2250, maxSalary: 2499.99, employeeRate: 0.04, employerRate: 0.09 },
-  { minSalary: 2500, maxSalary: 2749.99, employeeRate: 0.04, employerRate: 0.09 },
-  { minSalary: 2750, maxSalary: 2999.99, employeeRate: 0.04, employerRate: 0.09 },
-  { minSalary: 3000, maxSalary: 3249.99, employeeRate: 0.05, employerRate: 0.1 },
-  { minSalary: 3250, maxSalary: 3499.99, employeeRate: 0.05, employerRate: 0.1 },
-  { minSalary: 3500, maxSalary: 3749.99, employeeRate: 0.05, employerRate: 0.1 },
-  { minSalary: 3750, maxSalary: 3999.99, employeeRate: 0.05, employerRate: 0.1 },
-  { minSalary: 4000, maxSalary: 4249.99, employeeRate: 0.06, employerRate: 0.11 },
-  { minSalary: 4250, maxSalary: 4499.99, employeeRate: 0.06, employerRate: 0.11 },
-  { minSalary: 4500, maxSalary: 4749.99, employeeRate: 0.06, employerRate: 0.11 },
-  { minSalary: 4750, maxSalary: 4999.99, employeeRate: 0.06, employerRate: 0.11 },
-  { minSalary: 5000, maxSalary: Infinity, employeeRate: 0.06, employerRate: 0.11 },
-];
+// Philippine SSS Contribution Rates for 2026
+// SIMPLIFIED ESTIMATION: Employee share 5%, Employer share 10% of monthly salary credit
+// TODO: Replace simplified SSS logic with exact official SSS Monthly Salary Credit table.
+export const SSS_RATES = {
+  employeeRate: 0.05, // 5% of monthly salary credit
+  employerRate: 0.1, // 10% of monthly salary credit
+  totalRate: 0.15, // 15% combined
+};
 
-// PhilHealth Premium Rates for 2024
-// Based on monthly salary
+// PhilHealth Premium Rates for 2026
+// Premium rate: 5% total (Employee 2.5%, Employer 2.5%)
+// Monthly salary floor: ₱10,000, ceiling: ₱100,000
 export const PHILHEALTH_RATES = {
+  employeeRate: 0.025, // 2.5% employee share
+  employerRate: 0.025, // 2.5% employer share
   minSalary: 10000,
-  basePremium: 300,
-  percentageRate: 0.025, // 2.5% of salary above minimum
+  maxSalary: 100000,
 };
 
-// Pag-IBIG Contribution Rates for 2024
+// Pag-IBIG Contribution Rates for 2026
+// Employee contribution: 2%, Employer contribution: 2%
+// Monthly compensation cap: ₱10,000, Max employee contribution: ₱200
 export const PAGIBIG_RATES = {
-  employeeRate: 0.01, // 1% of gross salary
-  maxBaseSalary: 5000,
-  maxContribution: 100,
+  employeeRate: 0.02, // 2% of monthly compensation
+  employerRate: 0.02, // 2% of monthly compensation
+  maxBaseSalary: 10000,
+  maxEmployeeContribution: 200,
 };
 
-// BIR Withholding Tax Table 2024 (Non-Resident Alien / Resident Citizen)
-// Monthly compensation range and tax rates
+// BIR Withholding Tax Table 2026 (Resident Citizen / Non-Resident Alien)
+// Monthly compensation range and tax computation
 export const BIR_WITHHOLDING_TAX_TABLE = [
-  { minAmount: 0, maxAmount: 20832.33, taxAmount: 0, excessRate: 0 },
-  { minAmount: 20832.34, maxAmount: 33333.33, taxAmount: 0, excessRate: 0.05 },
-  { minAmount: 33333.34, maxAmount: 66666.67, taxAmount: 625, excessRate: 0.1 },
-  { minAmount: 66666.68, maxAmount: 166666.67, taxAmount: 4041.67, excessRate: 0.15 },
-  { minAmount: 166666.68, maxAmount: 666666.67, taxAmount: 19041.67, excessRate: 0.2 },
-  { minAmount: 666666.68, maxAmount: Infinity, taxAmount: 119041.67, excessRate: 0.25 },
+  { minAmount: 0, maxAmount: 20833, taxAmount: 0, excessRate: 0 },
+  { minAmount: 20833.01, maxAmount: 33333, taxAmount: 0, excessRate: 0.15 },
+  { minAmount: 33333.01, maxAmount: 66667, taxAmount: 1875, excessRate: 0.20 },
+  { minAmount: 66667.01, maxAmount: 166667, taxAmount: 8541.8, excessRate: 0.25 },
+  { minAmount: 166667.01, maxAmount: 666667, taxAmount: 33541.8, excessRate: 0.30 },
+  { minAmount: 666667.01, maxAmount: Infinity, taxAmount: 183541.8, excessRate: 0.35 },
 ];
 
-// Tax-free income components (non-taxable)
-export const NON_TAXABLE_COMPONENTS = {
-  mealAllowance: 1700, // Monthly
-  transportAllowance: 2000, // Monthly
-  maxNonTaxableAllowance: 90000, // Monthly
+// Non-taxable income limits (2026)
+export const NON_TAXABLE_LIMITS = {
+  annualThirteenthMonthAndOtherBenefitsLimit: 90000, // Annual limit for 13th month pay and other benefits
 };
 
+// Calculate SSS employee contribution (simplified 2026 estimate)
 export function getSSSContribution(monthlySalary: number): number {
-  const entry = SSS_CONTRIBUTION_TABLE.find(
-    (row) => monthlySalary >= row.minSalary && monthlySalary <= row.maxSalary
-  );
-  if (!entry) return 0;
-  return monthlySalary * entry.employeeRate;
+  return monthlySalary * SSS_RATES.employeeRate;
 }
 
+// Calculate PhilHealth employee contribution (2026 rates)
 export function getPhilHealthContribution(monthlySalary: number): number {
-  if (monthlySalary < PHILHEALTH_RATES.minSalary) {
-    return PHILHEALTH_RATES.basePremium / 2; // Minimum premium
-  }
-  return (
-    PHILHEALTH_RATES.basePremium +
-    (monthlySalary - PHILHEALTH_RATES.minSalary) * PHILHEALTH_RATES.percentageRate
-  ) / 2;
+  const salaryBase = Math.min(Math.max(monthlySalary, PHILHEALTH_RATES.minSalary), PHILHEALTH_RATES.maxSalary);
+  return salaryBase * PHILHEALTH_RATES.employeeRate;
 }
 
+// Calculate Pag-IBIG employee contribution (2026 rates)
 export function getPagIbigContribution(monthlySalary: number): number {
-  const baseSalary = Math.min(monthlySalary, PAGIBIG_RATES.maxBaseSalary);
-  return Math.min(baseSalary * PAGIBIG_RATES.employeeRate, PAGIBIG_RATES.maxContribution);
+  const salaryBase = Math.min(monthlySalary, PAGIBIG_RATES.maxBaseSalary);
+  return Math.min(salaryBase * PAGIBIG_RATES.employeeRate, PAGIBIG_RATES.maxEmployeeContribution);
 }
 
+// Calculate BIR withholding tax (2026 rates)
 export function getWithholdingTax(grossIncome: number, taxableIncome: number): number {
   const entry = BIR_WITHHOLDING_TAX_TABLE.find(
     (row) => taxableIncome >= row.minAmount && taxableIncome <= row.maxAmount
@@ -88,3 +72,8 @@ export function getWithholdingTax(grossIncome: number, taxableIncome: number): n
   const tax = entry.taxAmount + excess * entry.excessRate;
   return Math.max(0, tax);
 }
+
+// DISCLAIMER: This calculator provides estimates for Philippine payroll taxes and contributions.
+// Actual payroll calculations may differ based on employer payroll setup, special arrangements,
+// or updates to tax laws and rates. Always verify with official BIR, SSS, PhilHealth, and Pag-IBIG
+// guidance for accurate and up-to-date information.

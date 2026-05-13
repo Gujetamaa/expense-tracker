@@ -4,7 +4,6 @@ import {
   getPhilHealthContribution,
   getPagIbigContribution,
   getWithholdingTax,
-  NON_TAXABLE_COMPONENTS,
 } from './phTaxTables';
 
 export function calculateSalaryDeductions(settings: SalarySettings): SalaryDeductions {
@@ -28,12 +27,13 @@ export function calculateSalaryDeductions(settings: SalarySettings): SalaryDeduc
 
   // Calculate taxable income
   // Taxable income = Gross - Non-taxable allowances - Contributions
+  // Note: The ₱90,000 annual limit applies to 13th month pay and other benefits, not regular monthly allowances
   const nonTaxableDeductions = sssContribution + philHealthContribution + pagIbigContribution;
   const taxableIncome = Math.max(
     0,
     monthlyBasicSalary +
       monthlyTaxableAllowance -
-      Math.min(monthlyNonTaxableAllowance, NON_TAXABLE_COMPONENTS.maxNonTaxableAllowance) -
+      monthlyNonTaxableAllowance -
       nonTaxableDeductions
   );
 

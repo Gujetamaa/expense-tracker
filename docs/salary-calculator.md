@@ -9,7 +9,7 @@ The Salary Calculator helps you understand your net take-home pay from your gros
 **Page**: `app/(routes)/salary-calculator/page.tsx`
 
 ## Purpose
-
+.
 For personal financial planning, you need to know how much money actually lands in your account each month. This tool provides:
 - Breakdown of deductions
 - Net salary calculation
@@ -249,7 +249,7 @@ Target date: 18 months
 
 ## Settings (Future)
 
-- [ ] Tax year selection (2024, 2025, 2026, etc.)
+- [ ] Tax year selection (currently using 2026, future: support 2024, 2025, 2027, etc.)
 - [ ] Different tax brackets (regional variations)
 - [ ] Spouse/dependent deductions
 - [ ] Housing allowance calculations
