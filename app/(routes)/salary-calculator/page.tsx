@@ -203,7 +203,7 @@ export default function SalaryCalculatorPage() {
 
               <div className="bg-yellow-50 rounded-lg shadow-md p-4 border border-yellow-200 text-sm text-yellow-800">
                 <p className="font-semibold mb-1">ℹ️ Note:</p>
-                <p>This calculator uses 2024 BIR tax tables. Actual deductions may vary based on your tax status and other factors.</p>
+                <p>This calculator uses 2026 BIR tax tables. Actual deductions may vary based on your tax status and other factors.</p>
               </div>
             </div>
           )}
