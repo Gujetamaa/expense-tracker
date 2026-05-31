@@ -3,7 +3,7 @@ import { Goal, GoalType, GoalPriority } from '@/types';
 export const GOAL_TYPES: GoalType[] = ['Emergency Fund', 'PC Build', 'Gadget', 'Fitness', 'Travel', 'Investment', 'MP2', 'General Savings', 'Other'];
 
 export const GOAL_TYPE_EMOJIS: Record<GoalType, string> = {
-  'Emergency Fund': '🛟',
+  'Emergency Fund': '🆘',
   'PC Build': '🖥️',
   'Gadget': '📱',
   'Fitness': '💪',

@@ -7,9 +7,10 @@ interface CreditCardCardProps {
   card: CreditCard;
   onEdit: (card: CreditCard) => void;
   onDelete: (id: string) => void;
+  editMode?: boolean;
 }
 
-export default function CreditCardCard({ card, onEdit, onDelete }: CreditCardCardProps) {
+export default function CreditCardCard({ card, onEdit, onDelete, editMode = false }: CreditCardCardProps) {
   const stats = getCardStats(card);
   const colors = getBalanceColor(card);
 
@@ -23,24 +24,26 @@ export default function CreditCardCard({ card, onEdit, onDelete }: CreditCardCar
             <p className="text-xs text-gray-500">Credit Card</p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => onEdit(card)}
-            className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => {
-              if (confirm('Delete this card?')) {
-                onDelete(card.id);
-              }
-            }}
-            className="text-red-500 hover:text-red-700 font-semibold text-sm transition"
-          >
-            Delete
-          </button>
-        </div>
+        {!editMode && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onEdit(card)}
+              className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                if (confirm('Delete this card?')) {
+                  onDelete(card.id);
+                }
+              }}
+              className="text-red-500 hover:text-red-700 font-semibold text-sm transition"
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
       <div className={`mb-4 p-4 bg-white rounded-lg border-l-4 ${colors.border}`}>

@@ -12,6 +12,10 @@ export default function GoalsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [goalOrder, setGoalOrder] = useState<string[]>([]);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [originalOrder, setOriginalOrder] = useState<string[]>([]);
 
   useEffect(() => {
     const loadGoals = () => {
@@ -20,7 +24,22 @@ export default function GoalsPage() {
       const uniqueGoals = Array.from(
         new Map(freshGoals.map((g) => [g.id, g])).values()
       );
-      setGoals(uniqueGoals);
+
+      // Load custom order from localStorage
+      const savedOrder = localStorage.getItem('goals_order');
+      if (savedOrder) {
+        const order = JSON.parse(savedOrder) as string[];
+        const orderedGoals = order
+          .map((id) => uniqueGoals.find((g) => g.id === id))
+          .filter((g) => g !== undefined) as Goal[];
+        // Add any new goals not in the saved order
+        const newGoals = uniqueGoals.filter((g) => !order.includes(g.id));
+        setGoals([...orderedGoals, ...newGoals]);
+        setGoalOrder([...order, ...newGoals.map((g) => g.id)]);
+      } else {
+        setGoals(uniqueGoals);
+        setGoalOrder(uniqueGoals.map((g) => g.id));
+      }
     };
 
     loadGoals();
@@ -68,6 +87,57 @@ export default function GoalsPage() {
     setShowForm(false);
   };
 
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    setDraggedId(id);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, dropId: string) => {
+    e.preventDefault();
+    if (!draggedId || draggedId === dropId) return;
+
+    const dragIndex = goalOrder.indexOf(draggedId);
+    const dropIndex = goalOrder.indexOf(dropId);
+
+    const newOrder = [...goalOrder];
+    [newOrder[dragIndex], newOrder[dropIndex]] = [newOrder[dropIndex], newOrder[dragIndex]];
+
+    setGoalOrder(newOrder);
+    localStorage.setItem('goals_order', JSON.stringify(newOrder));
+
+    // Reorder displayed goals
+    const reordered = newOrder
+      .map((goalId) => goals.find((g) => g.id === goalId))
+      .filter((g) => g !== undefined) as Goal[];
+    setGoals(reordered);
+    setDraggedId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedId(null);
+  };
+
+  const handleEditMode = () => {
+    if (!editMode) {
+      setOriginalOrder([...goalOrder]);
+    }
+    setEditMode(!editMode);
+  };
+
+  const handleCancelReorder = () => {
+    const reordered = originalOrder
+      .map((goalId) => goals.find((g) => g.id === goalId))
+      .filter((g) => g !== undefined) as Goal[];
+    setGoals(reordered);
+    setGoalOrder(originalOrder);
+    setEditMode(false);
+  };
+
   if (!mounted) {
     return <div className="p-8 text-center">Loading...</div>;
   }
@@ -82,17 +152,48 @@ export default function GoalsPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-0">Goals</h1>
-          <button
-            onClick={() => {
-              setEditingGoal(null);
-              setShowForm(!showForm);
-            }}
-            className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
-          >
-            {showForm ? '✕ Close' : '+ Add Goal'}
-          </button>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Goals</h1>
+          <div className="flex gap-2">
+            {goals.length > 0 && (
+              <>
+                {editMode ? (
+                  <>
+                    <button
+                      onClick={() => setEditMode(false)}
+                      className="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition"
+                    >
+                      ✓ Done
+                    </button>
+                    <button
+                      onClick={handleCancelReorder}
+                      className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                    >
+                      ✕ Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={handleEditMode}
+                    className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                  >
+                    ✎ Edit Order
+                  </button>
+                )}
+              </>
+            )}
+            {!editMode && (
+              <button
+                onClick={() => {
+                  setEditingGoal(null);
+                  setShowForm(!showForm);
+                }}
+                className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+              >
+                {showForm ? '✕ Close' : '+ Add Goal'}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Summary Stats */}
@@ -100,7 +201,7 @@ export default function GoalsPage() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <p className="text-gray-600 text-sm font-semibold">Total Saved</p>
             <p className="text-3xl font-bold text-blue-600 mt-2">
-              ₱{totalSaved.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              ₱{totalSaved.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6">
@@ -133,13 +234,28 @@ export default function GoalsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedGoals.map((goal) => (
-              <GoalCard
+            {goals.map((goal) => (
+              <div
                 key={goal.id}
-                goal={goal}
-                onEdit={handleEditGoal}
-                onDelete={handleDeleteGoal}
-              />
+                draggable={editMode}
+                onDragStart={(e) => handleDragStart(e, goal.id)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, goal.id)}
+                onDragEnd={handleDragEnd}
+                className={`${editMode ? 'cursor-move' : ''} ${draggedId === goal.id ? 'opacity-50' : ''} transition-opacity`}
+              >
+                {editMode && (
+                  <div className="absolute top-2 left-2 z-10 text-2xl text-gray-400">
+                    ☰
+                  </div>
+                )}
+                <GoalCard
+                  goal={goal}
+                  onEdit={handleEditGoal}
+                  onDelete={handleDeleteGoal}
+                  editMode={editMode}
+                />
+              </div>
             ))}
           </div>
         )}

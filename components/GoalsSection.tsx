@@ -91,7 +91,7 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
       <div className="bg-blue-50 rounded-lg shadow-sm p-4 border border-blue-200">
         <p className="text-sm text-blue-700">
           <strong>{goals.length} goal{goals.length !== 1 ? 's' : ''}</strong> •
-          <strong className="ml-2">₱{totalSavedAcrossGoals.toLocaleString()} saved</strong>
+          <strong className="ml-2">₱{totalSavedAcrossGoals.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} saved</strong>
         </p>
       </div>
 

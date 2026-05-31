@@ -3,7 +3,11 @@ import { applyAccountDebit, reverseAccountDebit, applyAccountCredit, reverseAcco
 import { applyCardCharge, reverseCardCharge, applyCardPayment, reverseCardPayment } from './creditCardEffects';
 
 export function applyTransactionEffects(transaction: Transaction): void {
-  if (transaction.type === 'expense') {
+  if (transaction.type === 'income') {
+    if (transaction.linkedAccountId) {
+      applyAccountCredit(transaction.linkedAccountId, transaction.amount);
+    }
+  } else if (transaction.type === 'expense') {
     if (transaction.paymentMethod === 'Credit Card' && transaction.linkedCreditCardId) {
       applyCardCharge(transaction.linkedCreditCardId, transaction.amount);
     } else if (
@@ -33,7 +37,11 @@ export function applyTransactionEffects(transaction: Transaction): void {
 }
 
 export function reverseTransactionEffects(transaction: Transaction): void {
-  if (transaction.type === 'expense') {
+  if (transaction.type === 'income') {
+    if (transaction.linkedAccountId) {
+      reverseAccountCredit(transaction.linkedAccountId, transaction.amount);
+    }
+  } else if (transaction.type === 'expense') {
     if (transaction.paymentMethod === 'Credit Card' && transaction.linkedCreditCardId) {
       reverseCardCharge(transaction.linkedCreditCardId, transaction.amount);
     } else if (

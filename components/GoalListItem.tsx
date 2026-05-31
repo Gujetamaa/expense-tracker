@@ -40,13 +40,13 @@ export default function GoalListItem({ goal, onEdit, onDelete }: GoalListItemPro
         </span>
       </td>
       <td className="px-6 py-4 text-sm text-gray-700 text-right">
-        ₱{currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / ₱{goal.targetAmount.toLocaleString()}
+        ₱{currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / ₱{goal.targetAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
       </td>
       <td className="px-6 py-4 text-sm font-semibold text-gray-700 text-right">
         {progress.toFixed(0)}%
       </td>
       <td className="px-6 py-4 text-sm text-gray-700 text-right">
-        ₱{remaining.toLocaleString()}
+        ₱{remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
       </td>
       <td className="px-6 py-4 text-sm text-gray-700 text-center">
         {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString() : '—'}

@@ -8,6 +8,7 @@ interface TransactionListProps {
   transactions: Transaction[];
   onEdit: (transaction: Transaction) => void;
   onDelete: (id: string) => void;
+  onPost?: (id: string) => void;
 }
 
 const typeColors = {
@@ -24,7 +25,7 @@ const typeLabels = {
   credit_card_payment: 'CC Payment',
 };
 
-export default function TransactionList({ transactions, onEdit, onDelete }: TransactionListProps) {
+export default function TransactionList({ transactions, onEdit, onDelete, onPost }: TransactionListProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [accounts, setAccounts] = useState<SavingsAccount[]>([]);
   const [creditCards, setCreditCards] = useState<CreditCard[]>([]);
@@ -69,6 +70,7 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Description</th>
               <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Amount</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Links</th>
               <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
             </tr>
@@ -80,7 +82,7 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
               const cardName = getCardName(transaction.linkedCreditCardId);
 
               return (
-                <tr key={transaction.id} className="border-b border-gray-200 hover:bg-gray-50 transition">
+                <tr key={transaction.id} className={`border-b border-gray-200 hover:bg-gray-50 transition ${transaction.status === 'draft' ? 'bg-amber-50' : ''}`}>
                   <td className="px-6 py-4 text-sm text-gray-700">{transaction.date}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${typeColors[transaction.type]}`}>
@@ -90,7 +92,18 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
                   <td className="px-6 py-4 text-sm text-gray-700">{transaction.category}</td>
                   <td className="px-6 py-4 text-sm text-gray-700">{transaction.description}</td>
                   <td className="px-6 py-4 text-sm font-semibold text-gray-700 text-right">
-                    ₱{transaction.amount.toLocaleString()}
+                    ₱{transaction.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                        transaction.status === 'draft'
+                          ? 'bg-amber-200 text-amber-800'
+                          : 'bg-green-200 text-green-800'
+                      }`}
+                    >
+                      {transaction.status === 'draft' ? '📝 Draft' : '✓ Posted'}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
                     {goalName && <div className="text-blue-600 font-semibold">Goal: {goalName}</div>}
@@ -98,10 +111,18 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
                     {cardName && <div className="text-orange-600 font-semibold">Card: {cardName}</div>}
                     {!goalName && !accountName && !cardName && <span className="text-gray-400">—</span>}
                   </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-6 py-4 text-center text-sm space-y-2">
+                    {transaction.status === 'draft' && onPost && (
+                      <button
+                        onClick={() => onPost(transaction.id)}
+                        className="block text-green-500 hover:text-green-700 font-semibold transition"
+                      >
+                        Post
+                      </button>
+                    )}
                     <button
                       onClick={() => onEdit(transaction)}
-                      className="text-blue-500 hover:text-blue-700 text-sm font-semibold mr-3 transition"
+                      className="text-blue-500 hover:text-blue-700 font-semibold transition"
                     >
                       Edit
                     </button>
@@ -111,7 +132,7 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
                           onDelete(transaction.id);
                         }
                       }}
-                      className="text-red-500 hover:text-red-700 text-sm font-semibold transition"
+                      className="text-red-500 hover:text-red-700 font-semibold transition"
                     >
                       Delete
                     </button>

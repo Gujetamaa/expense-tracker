@@ -13,10 +13,10 @@ export default function Navbar() {
   const navItems = [
     { href: '/', label: 'Dashboard' },
     { href: '/transactions', label: 'Transactions' },
-    { href: '/salary-calculator', label: 'Salary' },
     { href: '/savings-accounts', label: 'Savings' },
     { href: '/goals', label: 'Goals' },
     { href: '/credit-cards', label: 'Cards' },
+    { href: '/salary-calculator', label: 'Salary' },    
     { href: '/settings', label: 'Settings' },
   ];
 

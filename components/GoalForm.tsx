@@ -154,7 +154,7 @@ export default function GoalForm({ onSubmit, initialGoal, onCancel }: GoalFormPr
             <option value="">Select an account...</option>
             {accounts.map((account) => (
               <option key={account.id} value={account.id}>
-                {account.name} (₱{account.currentBalance.toLocaleString()})
+                {account.name} (₱{account.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
               </option>
             ))}
           </select>

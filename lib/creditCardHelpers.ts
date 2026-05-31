@@ -80,10 +80,10 @@ export function getBalanceStatusMessage(card: CreditCard): string {
   const stats = getCardStats(card);
 
   if (stats.isOverLimit) {
-    return `Over limit by ₱${Math.abs(card.creditLimit - card.currentBalance).toLocaleString()}`;
+    return `Over limit by ₱${Math.abs(card.creditLimit - card.currentBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
   if (stats.hasSurplus) {
-    return `Advance payment: ₱${Math.abs(card.currentBalance).toLocaleString()}`;
+    return `Advance payment: ₱${Math.abs(card.currentBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
   if (stats.utilizationLevel === 'high') {

@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Transaction, Category, PaymentMethod, TransactionType, SavingsAccount, Goal, CreditCard } from '@/types';
 import { getCategoriesForType, getDefaultCategoryForType } from '@/lib/categories';
-import { getSavingsAccounts, getGoals, getCreditCards } from '@/lib/storage';
+import { getSavingsAccounts, getGoals, getCreditCards, getAccountByName } from '@/lib/storage';
 
-const PAYMENT_METHODS: PaymentMethod[] = ['Cash', 'Debit Card', 'Credit Card', 'Bank Transfer', 'E-wallet'];
+const PAYMENT_METHODS: PaymentMethod[] = ['Debit Card', 'Credit Card', 'Bank Transfer', 'E-wallet'];
 
 interface TransactionFormProps {
   onSubmit: (transaction: Transaction) => void;
@@ -30,12 +30,28 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
   const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
   const [allGoals, setAllGoals] = useState<Goal[]>([]);
   const [creditCards, setCreditCards] = useState<CreditCard[]>([]);
+  const [saveAsDraft, setSaveAsDraft] = useState(false);
+  const [bpiAccountMissing, setBpiAccountMissing] = useState(false);
 
   useEffect(() => {
     setSavingsAccounts(getSavingsAccounts());
     setAllGoals(getGoals());
     setCreditCards(getCreditCards());
   }, []);
+
+  // Auto-select BPI Payroll for income transactions
+  useEffect(() => {
+    if (type === 'income' && !linkedAccountId) {
+      const bpiAccount = getAccountByName('BPI Payroll');
+      if (bpiAccount) {
+        setLinkedAccountId(bpiAccount.id);
+        setBpiAccountMissing(false);
+      } else {
+        setLinkedAccountId('');
+        setBpiAccountMissing(true);
+      }
+    }
+  }, [type]);
 
   const availableCategories = getCategoriesForType(type);
 
@@ -48,17 +64,18 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
   // Helper: Show payment method selector only for expenses
   const shouldShowPaymentMethod = (): boolean => type === 'expense';
 
+  // Helper: Show destination account dropdown for income
+  const shouldShowIncomeAccountDropdown = (): boolean => type === 'income';
+
   // Helper: For expenses, determine what account/card dropdown to show based on payment method
   const getExpenseAccountsForPaymentMethod = (): SavingsAccount[] => {
     switch (paymentMethod) {
       case 'Debit Card':
-        return savingsAccounts.filter(a => a.hasDebitCard);
+        return savingsAccounts.filter(a => a.hasDebitCard || a.accountType === 'Cash');
       case 'Bank Transfer':
         return savingsAccounts.filter(a => ['Traditional Bank', 'Digital Bank'].includes(a.accountType));
       case 'E-wallet':
         return savingsAccounts.filter(a => a.accountType === 'E-Wallet');
-      case 'Cash':
-        return savingsAccounts.filter(a => a.accountType === 'Cash');
       default:
         return [];
     }
@@ -99,6 +116,19 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
   };
 
   // Validation helpers
+  const validateIncome = (): boolean => {
+    if (type !== 'income') return true;
+    if (bpiAccountMissing) {
+      alert('BPI Payroll not found. Please select an income destination account.');
+      return false;
+    }
+    if (!linkedAccountId) {
+      alert('Please select an income destination account');
+      return false;
+    }
+    return true;
+  };
+
   const validateExpense = (): boolean => {
     if (type !== 'expense') return true;
     if (paymentMethod === 'Credit Card' && !linkedCreditCardId) {
@@ -158,7 +188,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
       return;
     }
 
-    if (!validateExpense() || !validateCreditCardPayment() || !validateSavingsTransfer()) {
+    if (!validateIncome() || !validateExpense() || !validateCreditCardPayment() || !validateSavingsTransfer()) {
       return;
     }
 
@@ -171,13 +201,14 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
       amount: parseFloat(amount),
       paymentMethod,
       linkedGoalId: type === 'savings_transfer' ? linkedGoalId || undefined : undefined,
-      linkedAccountId: (type === 'savings_transfer' || (type === 'expense' && paymentMethod !== 'Credit Card') || type === 'credit_card_payment') ? linkedAccountId || undefined : undefined,
+      linkedAccountId: (type === 'income' || type === 'savings_transfer' || (type === 'expense' && paymentMethod !== 'Credit Card') || type === 'credit_card_payment') ? linkedAccountId || undefined : undefined,
       linkedCreditCardId: (type === 'expense' && paymentMethod === 'Credit Card') || type === 'credit_card_payment' ? linkedCreditCardId || undefined : undefined,
       sourceAccountId: type === 'savings_transfer' ? sourceAccountId || undefined : undefined,
       destinationAccountId: type === 'savings_transfer' ? destinationAccountId || undefined : undefined,
       paymentSourceType: type === 'credit_card_payment' ? paymentSourceType : undefined,
       notes,
       createdAt: initialTransaction?.createdAt || new Date().toISOString(),
+      status: initialTransaction?.status || (saveAsDraft ? 'draft' : 'posted'),
     };
 
     onSubmit(transaction);
@@ -269,6 +300,30 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
           />
         </div>
 
+        {shouldShowIncomeAccountDropdown() && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Destination Account *
+              {linkedAccountId && savingsAccounts.find((a) => a.id === linkedAccountId) && (
+                <span className="text-xs text-gray-500 ml-2">(Auto-selected BPI Payroll)</span>
+              )}
+            </label>
+            <select
+              value={linkedAccountId}
+              onChange={(e) => setLinkedAccountId(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              <option value="">Select destination account...</option>
+              {savingsAccounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name} (₱{account.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {shouldShowPaymentMethod() && (
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Payment Method</label>
@@ -298,7 +353,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
               <option value="">Select a card...</option>
               {creditCards.map((card) => (
                 <option key={card.id} value={card.id}>
-                  {card.name} (₱{Math.abs(card.currentBalance).toLocaleString()})
+                  {card.name} (₱{Math.abs(card.currentBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                 </option>
               ))}
             </select>
@@ -307,25 +362,20 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
 
         {shouldShowExpenseAccountDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              {paymentMethod === 'Cash' ? 'Cash Account' : 'Account'} {paymentMethod === 'Cash' ? '(Optional)' : '*'}
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Account *</label>
             <select
               value={linkedAccountId}
               onChange={(e) => setLinkedAccountId(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required={paymentMethod !== 'Cash'}
+              required
             >
               <option value="">Select an account...</option>
               {expenseAccounts.map((account) => (
                 <option key={account.id} value={account.id}>
-                  {account.name} (₱{account.currentBalance.toLocaleString()})
+                  {account.name} (₱{account.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                 </option>
               ))}
             </select>
-            {paymentMethod === 'Cash' && expenseAccounts.length === 0 && (
-              <p className="text-xs text-gray-500 mt-1">No cash accounts. This expense will not update an account balance.</p>
-            )}
           </div>
         )}
 
@@ -342,7 +392,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
                 <option value="">Select source account...</option>
                 {savingsAccounts.map((account) => (
                   <option key={account.id} value={account.id}>
-                    {account.name} (₱{account.currentBalance.toLocaleString()})
+                    {account.name} (₱{account.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                   </option>
                 ))}
               </select>
@@ -359,7 +409,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
                 <option value="">Select destination account...</option>
                 {savingsAccounts.map((account) => (
                   <option key={account.id} value={account.id}>
-                    {account.name} (₱{account.currentBalance.toLocaleString()})
+                    {account.name} (₱{account.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                   </option>
                 ))}
               </select>
@@ -396,7 +446,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
               <option value="">Select a card...</option>
               {creditCards.map((card) => (
                 <option key={card.id} value={card.id}>
-                  {card.name} (₱{Math.abs(card.currentBalance).toLocaleString()})
+                  {card.name} (₱{Math.abs(card.currentBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                 </option>
               ))}
             </select>
@@ -431,13 +481,21 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
               <option value="">Select an account...</option>
               {savingsAccounts.map((account) => (
                 <option key={account.id} value={account.id}>
-                  {account.name} (₱{account.currentBalance.toLocaleString()})
+                  {account.name} (₱{account.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                 </option>
               ))}
             </select>
           </div>
         )}
       </div>
+
+      {type === 'income' && bpiAccountMissing && (
+        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            ⚠️ <strong>BPI Payroll not found.</strong> Please select an income destination account from the dropdown below.
+          </p>
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -457,12 +515,46 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
         ></textarea>
       </div>
 
+      {!initialTransaction && (
+        <div className="bg-blue-50 p-3 rounded-lg">
+          <p className="text-sm font-semibold text-gray-700 mb-2">Save as:</p>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              checked={!saveAsDraft}
+              onChange={() => setSaveAsDraft(false)}
+              className="accent-blue-500"
+            />
+            <span className="text-sm text-gray-700">Post Transaction (apply effects immediately)</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer mt-2">
+            <input
+              type="radio"
+              checked={saveAsDraft}
+              onChange={() => setSaveAsDraft(true)}
+              className="accent-blue-500"
+            />
+            <span className="text-sm text-gray-700">Save as Draft (review later)</span>
+          </label>
+        </div>
+      )}
+
       <div className="flex gap-2 pt-4">
         <button
           type="submit"
-          className="flex-1 bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition"
+          className={`flex-1 font-semibold py-2 rounded-lg transition ${
+            initialTransaction
+              ? 'bg-blue-500 text-white hover:bg-blue-600'
+              : saveAsDraft
+              ? 'bg-amber-500 text-white hover:bg-amber-600'
+              : 'bg-green-500 text-white hover:bg-green-600'
+          }`}
         >
-          {initialTransaction ? 'Update' : 'Add'} Transaction
+          {initialTransaction
+            ? 'Update Transaction'
+            : saveAsDraft
+            ? '✓ Save as Draft'
+            : '✓ Post Transaction'}
         </button>
         {onCancel && (
           <button

@@ -7,6 +7,7 @@ interface SavingsAccountCardProps {
   account: SavingsAccount;
   onEdit: (account: SavingsAccount) => void;
   onDelete: (id: string) => void;
+  editMode?: boolean;
 }
 
 const accountTypeEmoji = {
@@ -19,7 +20,7 @@ const accountTypeEmoji = {
   'Other': '💼',
 };
 
-export default function SavingsAccountCard({ account, onEdit, onDelete }: SavingsAccountCardProps) {
+export default function SavingsAccountCard({ account, onEdit, onDelete, editMode = false }: SavingsAccountCardProps) {
   const emoji = accountTypeEmoji[account.accountType] || '💼';
 
   return (
@@ -39,24 +40,26 @@ export default function SavingsAccountCard({ account, onEdit, onDelete }: Saving
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => onEdit(account)}
-            className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => {
-              if (confirm('Delete this account? This action cannot be undone.')) {
-                onDelete(account.id);
-              }
-            }}
-            className="text-red-500 hover:text-red-700 font-semibold text-sm transition"
-          >
-            Delete
-          </button>
-        </div>
+        {!editMode && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onEdit(account)}
+              className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                if (confirm('Delete this account? This action cannot be undone.')) {
+                  onDelete(account.id);
+                }
+              }}
+              className="text-red-500 hover:text-red-700 font-semibold text-sm transition"
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="mb-4 p-3 bg-gray-50 rounded-lg">

@@ -19,7 +19,7 @@ export default function ProgressBar({ label, current, target, color }: ProgressB
     <div className="w-full">
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-semibold text-gray-700">{label}</span>
-        <span className="text-sm text-gray-600">₱{current.toLocaleString()} / ₱{target.toLocaleString()}</span>
+        <span className="text-sm text-gray-600">₱{current.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / ₱{target.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
         <div

@@ -10,9 +10,10 @@ interface GoalCardProps {
   goal: Goal;
   onEdit: (goal: Goal) => void;
   onDelete: (id: string) => void;
+  editMode?: boolean;
 }
 
-export default function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
+export default function GoalCard({ goal, onEdit, onDelete, editMode = false }: GoalCardProps) {
   const [linkedAccount, setLinkedAccount] = useState<SavingsAccount | null>(null);
 
   useEffect(() => {
@@ -39,24 +40,26 @@ export default function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => onEdit(goal)}
-            className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => {
-              if (confirm('Delete this goal?')) {
-                onDelete(goal.id);
-              }
-            }}
-            className="text-red-500 hover:text-red-700 font-semibold text-sm transition"
-          >
-            Delete
-          </button>
-        </div>
+        {!editMode && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onEdit(goal)}
+              className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                if (confirm('Delete this goal?')) {
+                  onDelete(goal.id);
+                }
+              }}
+              className="text-red-500 hover:text-red-700 font-semibold text-sm transition"
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
       {linkedAccount && (
@@ -71,7 +74,7 @@ export default function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm text-gray-600">Progress</span>
           <span className="text-sm font-semibold text-gray-800">
-            ₱{currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / ₱{goal.targetAmount.toLocaleString()}
+            ₱{currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / ₱{goal.targetAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         </div>
         <ProgressBar
@@ -86,7 +89,7 @@ export default function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
       <div className="grid grid-cols-2 gap-4 p-3 bg-white rounded-lg">
         <div>
           <p className="text-xs text-gray-500">Remaining</p>
-          <p className="text-lg font-bold text-gray-800">₱{remaining.toLocaleString()}</p>
+          <p className="text-lg font-bold text-gray-800">₱{remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
         </div>
         <div>
           <p className="text-xs text-gray-500">Target Date</p>

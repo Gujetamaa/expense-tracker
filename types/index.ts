@@ -44,6 +44,7 @@ export interface Transaction {
   paymentSourceType?: 'Account' | 'Cash' | 'Other';
   notes: string;
   createdAt: string;
+  status: 'draft' | 'posted';
 }
 
 export interface SavingsAccount {

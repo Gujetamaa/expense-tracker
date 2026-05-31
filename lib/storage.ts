@@ -11,7 +11,13 @@ const CREDIT_CARDS_KEY = 'expenses_tracker_credit_cards';
 export const getTransactions = (): Transaction[] => {
   if (typeof window === 'undefined') return [];
   const data = localStorage.getItem(TRANSACTIONS_KEY);
-  return data ? JSON.parse(data) : [];
+  if (!data) return [];
+  const transactions = JSON.parse(data) as Transaction[];
+  // Migration: add status field if missing (backward compatibility)
+  return transactions.map((t) => ({
+    ...t,
+    status: t.status || 'posted',
+  }));
 };
 
 export const saveTransaction = (transaction: Transaction): void => {
@@ -175,4 +181,44 @@ export const updateCreditCardBalance = (id: string, amount: number): void => {
     cards[index].updatedAt = new Date().toISOString();
     localStorage.setItem(CREDIT_CARDS_KEY, JSON.stringify(cards));
   }
+};
+
+// Draft Transaction Helpers
+export const getDraftTransactions = (): Transaction[] => {
+  return getTransactions().filter((t) => t.status === 'draft');
+};
+
+export const getPostedTransactions = (): Transaction[] => {
+  return getTransactions().filter((t) => t.status === 'posted');
+};
+
+export const postTransactionDraft = (id: string): Transaction | null => {
+  const transactions = getTransactions();
+  const index = transactions.findIndex((t) => t.id === id);
+  if (index !== -1) {
+    transactions[index].status = 'posted';
+    localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
+    return transactions[index];
+  }
+  return null;
+};
+
+export const postMultipleDrafts = (ids: string[]): Transaction[] => {
+  const transactions = getTransactions();
+  const idSet = new Set(ids);
+  const posted: Transaction[] = [];
+  const updated = transactions.map((t) => {
+    if (idSet.has(t.id) && t.status === 'draft') {
+      t.status = 'posted';
+      posted.push(t);
+    }
+    return t;
+  });
+  localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(updated));
+  return posted;
+};
+
+export const getAccountByName = (name: string): SavingsAccount | null => {
+  const accounts = getSavingsAccounts();
+  return accounts.find((a) => a.name === name) || null;
 };

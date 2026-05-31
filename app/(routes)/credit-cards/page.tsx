@@ -11,6 +11,8 @@ export default function CreditCardsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingCard, setEditingCard] = useState<CreditCard | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [cardOrder, setCardOrder] = useState<string[]>([]);
 
   useEffect(() => {
     const loadCards = () => {
@@ -19,7 +21,22 @@ export default function CreditCardsPage() {
       const uniqueCards = Array.from(
         new Map(freshCards.map((c) => [c.id, c])).values()
       );
-      setCards(uniqueCards);
+
+      // Load custom order from localStorage
+      const savedOrder = localStorage.getItem('credit_cards_order');
+      if (savedOrder) {
+        const order = JSON.parse(savedOrder) as string[];
+        const orderedCards = order
+          .map((id) => uniqueCards.find((c) => c.id === id))
+          .filter((c) => c !== undefined) as CreditCard[];
+        // Add any new cards not in the saved order
+        const newCards = uniqueCards.filter((c) => !order.includes(c.id));
+        setCards([...orderedCards, ...newCards]);
+        setCardOrder([...order, ...newCards.map((c) => c.id)]);
+      } else {
+        setCards(uniqueCards);
+        setCardOrder(uniqueCards.map((c) => c.id));
+      }
     };
 
     loadCards();
@@ -67,6 +84,60 @@ export default function CreditCardsPage() {
     setShowForm(false);
   };
 
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [originalOrder, setOriginalOrder] = useState<string[]>([]);
+
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    setDraggedId(id);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, dropId: string) => {
+    e.preventDefault();
+    if (!draggedId || draggedId === dropId) return;
+
+    const dragIndex = cardOrder.indexOf(draggedId);
+    const dropIndex = cardOrder.indexOf(dropId);
+
+    const newOrder = [...cardOrder];
+    [newOrder[dragIndex], newOrder[dropIndex]] = [newOrder[dropIndex], newOrder[dragIndex]];
+
+    setCardOrder(newOrder);
+    localStorage.setItem('credit_cards_order', JSON.stringify(newOrder));
+
+    // Reorder displayed cards
+    const reordered = newOrder
+      .map((cardId) => cards.find((c) => c.id === cardId))
+      .filter((c) => c !== undefined) as CreditCard[];
+    setCards(reordered);
+    setDraggedId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedId(null);
+  };
+
+  const handleEditMode = () => {
+    if (!editMode) {
+      setOriginalOrder([...cardOrder]);
+    }
+    setEditMode(!editMode);
+  };
+
+  const handleCancelReorder = () => {
+    const reordered = originalOrder
+      .map((cardId) => cards.find((c) => c.id === cardId))
+      .filter((c) => c !== undefined) as CreditCard[];
+    setCards(reordered);
+    setCardOrder(originalOrder);
+    setEditMode(false);
+  };
+
   if (!mounted) {
     return <div className="p-8 text-center">Loading...</div>;
   }
@@ -79,17 +150,48 @@ export default function CreditCardsPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-0">Credit Cards</h1>
-          <button
-            onClick={() => {
-              setEditingCard(null);
-              setShowForm(!showForm);
-            }}
-            className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
-          >
-            {showForm ? '✕ Close' : '+ Add Card'}
-          </button>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Credit Cards</h1>
+          <div className="flex gap-2">
+            {cards.length > 0 && (
+              <>
+                {editMode ? (
+                  <>
+                    <button
+                      onClick={() => setEditMode(false)}
+                      className="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition"
+                    >
+                      ✓ Done
+                    </button>
+                    <button
+                      onClick={handleCancelReorder}
+                      className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                    >
+                      ✕ Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={handleEditMode}
+                    className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                  >
+                    ✎ Edit Order
+                  </button>
+                )}
+              </>
+            )}
+            {!editMode && (
+              <button
+                onClick={() => {
+                  setEditingCard(null);
+                  setShowForm(!showForm);
+                }}
+                className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+              >
+                {showForm ? '✕ Close' : '+ Add Card'}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Summary Stats */}
@@ -136,12 +238,27 @@ export default function CreditCardsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {cards.map((card) => (
-              <CreditCardCard
+              <div
                 key={card.id}
-                card={card}
-                onEdit={handleEditCard}
-                onDelete={handleDeleteCard}
-              />
+                draggable={editMode}
+                onDragStart={(e) => handleDragStart(e, card.id)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, card.id)}
+                onDragEnd={handleDragEnd}
+                className={`${editMode ? 'cursor-move' : ''} ${draggedId === card.id ? 'opacity-50' : ''} transition-opacity`}
+              >
+                {editMode && (
+                  <div className="absolute top-2 left-2 z-10 text-2xl text-gray-400">
+                    ☰
+                  </div>
+                )}
+                <CreditCardCard
+                  card={card}
+                  onEdit={handleEditCard}
+                  onDelete={handleDeleteCard}
+                  editMode={editMode}
+                />
+              </div>
             ))}
           </div>
         )}

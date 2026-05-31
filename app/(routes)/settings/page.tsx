@@ -26,7 +26,7 @@ export default function SettingsPage() {
               <div className="flex justify-between">
                 <span className="text-gray-600">Basic Monthly Salary:</span>
                 <span className="font-semibold text-gray-800">
-                  ₱{salarySettings.basicMonthlySalary.toLocaleString()}
+                  ₱{salarySettings.basicMonthlySalary.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -36,13 +36,13 @@ export default function SettingsPage() {
               <div className="flex justify-between">
                 <span className="text-gray-600">Taxable Allowance:</span>
                 <span className="font-semibold text-gray-800">
-                  ₱{salarySettings.taxableAllowance.toLocaleString()}
+                  ₱{salarySettings.taxableAllowance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Non-Taxable Allowance:</span>
                 <span className="font-semibold text-gray-800">
-                  ₱{salarySettings.nonTaxableAllowance.toLocaleString()}
+                  ₱{salarySettings.nonTaxableAllowance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
             </div>

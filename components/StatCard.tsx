@@ -13,7 +13,7 @@ export default function StatCard({ title, amount, icon, bgColor, textColor }: St
         <div>
           <p className="text-gray-600 text-sm font-semibold">{title}</p>
           <p className={`${textColor} text-2xl font-bold mt-2`}>
-            ₱{amount.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+            ₱{amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
         <span className="text-4xl">{icon}</span>

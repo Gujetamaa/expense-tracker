@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Transaction, Goal, SavingsAccount, CreditCard } from '@/types';
-import { getTransactions, saveTransaction, updateTransaction, deleteTransaction, getGoals, deleteGoal, getSavingsAccounts, getCreditCards } from '@/lib/storage';
+import { getTransactions, saveTransaction, updateTransaction, deleteTransaction, getGoals, deleteGoal, getSavingsAccounts, getCreditCards, postTransactionDraft } from '@/lib/storage';
 import { getMonthYear, getTransactionsForMonth, calculateMonthlyStats } from '@/lib/calculations';
 import { applyTransactionEffects, reverseTransactionEffects, editTransactionEffects } from '@/lib/transactionEffects';
 import StatCard from './StatCard';
@@ -32,7 +32,18 @@ export default function Dashboard() {
   }, []);
 
   const monthlyTransactions = getTransactionsForMonth(transactions, selectedMonth);
-  const stats = calculateMonthlyStats(monthlyTransactions);
+  // Only count posted transactions in stats
+  const postedTransactions = monthlyTransactions.filter((t) => t.status === 'posted');
+  const draftTransactions = monthlyTransactions.filter((t) => t.status === 'draft');
+  const stats = calculateMonthlyStats(postedTransactions);
+
+  // Calculate draft summary
+  const draftIncome = draftTransactions
+    .filter((t) => t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
+  const draftExpenses = draftTransactions
+    .filter((t) => t.type === 'expense')
+    .reduce((sum, t) => sum + t.amount, 0);
 
   // Calculate total saved across all goals (from their linked accounts)
   const accountBalances = Object.fromEntries(accounts.map(a => [a.id, a.currentBalance]));
@@ -48,12 +59,20 @@ export default function Dashboard() {
 
   const handleAddTransaction = (transaction: Transaction) => {
     if (editingTransaction) {
-      editTransactionEffects(editingTransaction, transaction);
+      if (editingTransaction.status === 'posted' && transaction.status === 'posted') {
+        editTransactionEffects(editingTransaction, transaction);
+      } else if (editingTransaction.status === 'posted' && transaction.status === 'draft') {
+        reverseTransactionEffects(editingTransaction);
+      } else if (editingTransaction.status === 'draft' && transaction.status === 'posted') {
+        applyTransactionEffects(transaction);
+      }
       updateTransaction(transaction.id, transaction);
       setTransactions((prev) => prev.map((t) => (t.id === transaction.id ? transaction : t)));
       setEditingTransaction(null);
     } else {
-      applyTransactionEffects(transaction);
+      if (transaction.status === 'posted') {
+        applyTransactionEffects(transaction);
+      }
       saveTransaction(transaction);
       setTransactions((prev) => [...prev, transaction]);
     }
@@ -70,7 +89,9 @@ export default function Dashboard() {
   const handleDeleteTransaction = (id: string) => {
     const transaction = transactions.find((t) => t.id === id);
     if (transaction) {
-      reverseTransactionEffects(transaction);
+      if (transaction.status === 'posted') {
+        reverseTransactionEffects(transaction);
+      }
     }
     deleteTransaction(id);
     setTransactions((prev) => prev.filter((t) => t.id !== id));
@@ -79,6 +100,16 @@ export default function Dashboard() {
   const handleCancelEdit = () => {
     setEditingTransaction(null);
     setShowForm(false);
+  };
+
+  const handlePostDraft = (id: string) => {
+    const posted = postTransactionDraft(id);
+    if (posted) {
+      applyTransactionEffects(posted);
+      setTransactions((prev) => prev.map((t) => (t.id === id ? posted : t)));
+      setAccounts(getSavingsAccounts());
+      setCreditCards(getCreditCards());
+    }
   };
 
   const handleEditGoal = (goal: Goal) => {
@@ -176,6 +207,27 @@ export default function Dashboard() {
           />
         </div>
 
+        {/* Pending Drafts Summary */}
+        {draftTransactions.length > 0 && (
+          <div className="mb-8 bg-amber-50 rounded-lg shadow-md p-6 border border-amber-200">
+            <h2 className="text-xl font-bold text-amber-900 mb-4">📝 Pending Drafts</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-white rounded-lg border border-amber-100">
+                <p className="text-xs font-semibold text-gray-600">Draft Transactions</p>
+                <p className="text-2xl font-bold text-amber-600 mt-1">{draftTransactions.length}</p>
+              </div>
+              <div className="p-4 bg-white rounded-lg border border-amber-100">
+                <p className="text-xs font-semibold text-gray-600">Pending Income</p>
+                <p className="text-2xl font-bold text-green-600 mt-1">₱{draftIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              </div>
+              <div className="p-4 bg-white rounded-lg border border-amber-100">
+                <p className="text-xs font-semibold text-gray-600">Pending Expenses</p>
+                <p className="text-2xl font-bold text-red-600 mt-1">₱{draftExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Credit Cards Section */}
         {creditCards.length > 0 && (
           <div className="mb-8 bg-white rounded-lg shadow-md p-6 border border-gray-200">
@@ -230,6 +282,7 @@ export default function Dashboard() {
             transactions={monthlyTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())}
             onEdit={handleEditTransaction}
             onDelete={handleDeleteTransaction}
+            onPost={handlePostDraft}
           />
         </div>
       </div>
