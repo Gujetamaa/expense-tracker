@@ -24,7 +24,7 @@ export default function SavingsAccountCard({ account, onEdit, onDelete, editMode
   const emoji = accountTypeEmoji[account.accountType] || '💼';
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-slate-700/60">
+    <div className="h-full flex flex-col bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-slate-700/60">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3 flex-1">
           <span className="text-3xl">{emoji}</span>

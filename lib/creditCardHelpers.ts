@@ -59,21 +59,21 @@ export function getBalanceColor(card: CreditCard): { bg: string; text: string; b
   const stats = getCardStats(card);
 
   if (stats.isOverLimit) {
-    return { bg: 'bg-red-50', text: 'text-red-900', border: 'border-red-200' };
+    return { bg: 'bg-red-50 dark:bg-red-900/20', text: 'text-red-900 dark:text-red-300', border: 'border-red-200 dark:border-red-700/40' };
   }
   if (stats.hasSurplus) {
-    return { bg: 'bg-green-50', text: 'text-green-900', border: 'border-green-200' };
+    return { bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-900 dark:text-green-300', border: 'border-green-200 dark:border-green-700/40' };
   }
 
   // For outstanding balance, use utilization level
   if (stats.utilizationLevel === 'high' || stats.utilizationLevel === 'over-limit') {
-    return { bg: 'bg-orange-50', text: 'text-orange-900', border: 'border-orange-200' };
+    return { bg: 'bg-orange-50 dark:bg-orange-900/20', text: 'text-orange-900 dark:text-orange-300', border: 'border-orange-200 dark:border-orange-700/40' };
   }
   if (stats.utilizationLevel === 'moderate') {
-    return { bg: 'bg-yellow-50', text: 'text-yellow-900', border: 'border-yellow-200' };
+    return { bg: 'bg-yellow-50 dark:bg-yellow-900/20', text: 'text-yellow-900 dark:text-yellow-300', border: 'border-yellow-200 dark:border-yellow-700/40' };
   }
 
-  return { bg: 'bg-blue-50', text: 'text-blue-900', border: 'border-blue-200' };
+  return { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-900 dark:text-blue-300', border: 'border-blue-200 dark:border-blue-700/40' };
 }
 
 export function getBalanceStatusMessage(card: CreditCard): string {

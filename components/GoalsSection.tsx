@@ -107,7 +107,7 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
                   Priority {priority === 'High' ? '1 / High' : priority === 'Medium' ? '2 / Medium' : '3 / Low'}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                   {priorityGoals.map((goal) => (
                     <GoalCard
                       key={goal.id}

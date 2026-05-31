@@ -29,7 +29,7 @@ export default function GoalCard({ goal, onEdit, onDelete, editMode = false }: G
   const remaining = getRemainingAmount(currentBalance, goal.targetAmount);
 
   return (
-    <div className={`${colors.bg} dark:bg-slate-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-slate-700/60`}>
+    <div className={`h-full flex flex-col ${colors.bg} rounded-lg shadow-md p-6 border border-gray-200 dark:border-slate-700/60`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <span className="text-3xl">{emoji}</span>

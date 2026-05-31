@@ -240,7 +240,7 @@ export default function SavingsAccountsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {accounts.map((account) => (
               <div
                 key={account.id}
@@ -249,7 +249,7 @@ export default function SavingsAccountsPage() {
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, account.id)}
                 onDragEnd={handleDragEnd}
-                className={`${editMode ? 'cursor-move' : ''} ${draggedId === account.id ? 'opacity-50' : ''} transition-opacity`}
+                className={`h-full flex flex-col ${editMode ? 'cursor-move' : ''} ${draggedId === account.id ? 'opacity-50' : ''} transition-opacity`}
               >
                 {editMode && (
                   <div className="absolute top-2 left-2 z-10 text-2xl text-gray-400">

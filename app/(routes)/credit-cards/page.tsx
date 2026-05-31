@@ -237,7 +237,7 @@ export default function CreditCardsPage() {
             <p className="text-gray-500 text-lg">No credit cards yet. Add one to start tracking!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {cards.map((card) => (
               <div
                 key={card.id}
@@ -246,7 +246,7 @@ export default function CreditCardsPage() {
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, card.id)}
                 onDragEnd={handleDragEnd}
-                className={`${editMode ? 'cursor-move' : ''} ${draggedId === card.id ? 'opacity-50' : ''} transition-opacity`}
+                className={`h-full flex flex-col ${editMode ? 'cursor-move' : ''} ${draggedId === card.id ? 'opacity-50' : ''} transition-opacity`}
               >
                 {editMode && (
                   <div className="absolute top-2 left-2 z-10 text-2xl text-gray-400">

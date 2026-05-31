@@ -15,7 +15,7 @@ export default function CreditCardCard({ card, onEdit, onDelete, editMode = fals
   const colors = getBalanceColor(card);
 
   return (
-    <div className={`${colors.bg} dark:bg-slate-800 ${colors.border} dark:border-slate-700/60 rounded-lg shadow-md p-6 border`}>
+    <div className={`h-full flex flex-col ${colors.bg} ${colors.border} rounded-lg shadow-md p-6 border dark:border-slate-700/60`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <span className="text-3xl">💳</span>
@@ -49,7 +49,7 @@ export default function CreditCardCard({ card, onEdit, onDelete, editMode = fals
       <div className={`mb-4 p-4 bg-white dark:bg-slate-700/40 rounded-lg border-l-4 ${colors.border}`}>
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm text-gray-600 dark:text-gray-400">{stats.balanceLabel}</span>
-          <span className={`text-2xl font-bold ${colors.text} dark:text-slate-100`}>
+          <span className={`text-2xl font-bold ${colors.text}`}>
             ₱{Math.abs(stats.balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         </div>
@@ -75,8 +75,8 @@ export default function CreditCardCard({ card, onEdit, onDelete, editMode = fals
         </div>
       </div>
 
-      <div className={`p-3 rounded-lg border-l-4 ${colors.border} ${colors.bg} dark:bg-slate-700/40`}>
-        <p className={`text-sm font-semibold ${colors.text} dark:text-slate-100`}>{getBalanceStatusMessage(card)}</p>
+      <div className={`p-3 rounded-lg border-l-4 ${colors.border} ${colors.bg}`}>
+        <p className={`text-sm font-semibold ${colors.text}`}>{getBalanceStatusMessage(card)}</p>
       </div>
 
       {card.notes && (

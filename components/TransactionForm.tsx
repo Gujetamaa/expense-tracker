@@ -233,14 +233,14 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
   const expenseAccounts = getExpenseAccountsForPaymentMethod();
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Type</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type</label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value as TransactionType)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="income">Income</option>
             <option value="expense">Expense</option>
@@ -250,22 +250,22 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Date</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Category</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as Category)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {availableCategories.map((cat) => (
               <option key={cat} value={cat}>
@@ -276,42 +276,42 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Amount (₱)</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Amount (₱)</label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0.00"
             step="0.01"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Description</label>
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter description"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         {shouldShowIncomeAccountDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
               Destination Account *
               {linkedAccountId && savingsAccounts.find((a) => a.id === linkedAccountId) && (
-                <span className="text-xs text-gray-500 ml-2">(Auto-selected BPI Payroll)</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Auto-selected BPI Payroll)</span>
               )}
             </label>
             <select
               value={linkedAccountId}
               onChange={(e) => setLinkedAccountId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select destination account...</option>
@@ -326,11 +326,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
 
         {shouldShowPaymentMethod() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Payment Method</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Payment Method</label>
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {PAYMENT_METHODS.map((method) => (
                 <option key={method} value={method}>
@@ -343,11 +343,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
 
         {shouldShowExpenseCreditCardDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Credit Card *</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Credit Card *</label>
             <select
               value={linkedCreditCardId}
               onChange={(e) => setLinkedCreditCardId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select a card...</option>
@@ -362,11 +362,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
 
         {shouldShowExpenseAccountDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Account *</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Account *</label>
             <select
               value={linkedAccountId}
               onChange={(e) => setLinkedAccountId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select an account...</option>
@@ -382,11 +382,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
         {shouldShowSavingsTransferDropdowns() && (
           <>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">From Account *</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">From Account *</label>
               <select
                 value={sourceAccountId}
                 onChange={(e) => setSourceAccountId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               >
                 <option value="">Select source account...</option>
@@ -399,11 +399,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">To Account *</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">To Account *</label>
               <select
                 value={destinationAccountId}
                 onChange={(e) => setDestinationAccountId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               >
                 <option value="">Select destination account...</option>
@@ -416,11 +416,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Linked Goal (Optional)</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Linked Goal (Optional)</label>
               <select
                 value={linkedGoalId}
                 onChange={(e) => setLinkedGoalId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">No linked goal</option>
                 {allGoals.map((goal) => (
@@ -429,18 +429,18 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-gray-500 mt-1">For tagging/filtering only. Goal progress derives from its linked account balance.</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">For tagging/filtering only. Goal progress derives from its linked account balance.</p>
             </div>
           </>
         )}
 
         {shouldShowCreditCardPaymentDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Credit Card *</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Credit Card *</label>
             <select
               value={linkedCreditCardId}
               onChange={(e) => setLinkedCreditCardId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select a card...</option>
@@ -455,11 +455,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
 
         {shouldShowPaymentSourceDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Payment Source *</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Payment Source *</label>
             <select
               value={paymentSourceType}
               onChange={(e) => setPaymentSourceType(e.target.value as 'Account' | 'Cash' | 'Other')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="Account">From Account</option>
@@ -471,11 +471,11 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
 
         {shouldShowPaymentSourceAccountDropdown() && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Source Account *</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Source Account *</label>
             <select
               value={linkedAccountId}
               onChange={(e) => setLinkedAccountId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select an account...</option>
@@ -490,15 +490,15 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
       </div>
 
       {type === 'income' && bpiAccountMissing && (
-        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
+        <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/40 rounded-lg">
+          <p className="text-sm text-yellow-800 dark:text-yellow-300">
             ⚠️ <strong>BPI Payroll not found.</strong> Please select an income destination account from the dropdown below.
           </p>
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">
+        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
           Notes {isNotesRequired() ? '*' : '(Optional)'}
         </label>
         <textarea
@@ -510,14 +510,14 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
               : 'Optional notes'
           }
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           required={isNotesRequired()}
         ></textarea>
       </div>
 
       {!initialTransaction && (
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <p className="text-sm font-semibold text-gray-700 mb-2">Save as:</p>
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Save as:</p>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
@@ -525,7 +525,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
               onChange={() => setSaveAsDraft(false)}
               className="accent-blue-500"
             />
-            <span className="text-sm text-gray-700">Post Transaction (apply effects immediately)</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Post Transaction (apply effects immediately)</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer mt-2">
             <input
@@ -534,7 +534,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
               onChange={() => setSaveAsDraft(true)}
               className="accent-blue-500"
             />
-            <span className="text-sm text-gray-700">Save as Draft (review later)</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Save as Draft (review later)</span>
           </label>
         </div>
       )}
@@ -560,7 +560,7 @@ export default function TransactionForm({ onSubmit, initialTransaction, onCancel
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-400 transition"
+            className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition"
           >
             Cancel
           </button>

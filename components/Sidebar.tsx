@@ -28,14 +28,14 @@ export default function Sidebar() {
       className={`
         sidebar-wrapper
         ${isCollapsed ? 'w-16' : 'w-60'}
-        ${isDark ? 'bg-slate-900 text-white border-slate-700' : 'bg-white text-gray-900 border-slate-200'}
+        ${isDark ? 'bg-gray-900 text-white border-gray-700' : 'bg-white text-gray-900 border-slate-200'}
       `}
     >
       {/* Header: hamburger + logo */}
-      <div className={`sidebar-header ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
+      <div className={`sidebar-header ${isDark ? 'border-gray-700' : 'border-slate-200'}`}>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={`p-2 rounded-lg transition-colors flex-shrink-0 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
+          className={`p-2 rounded-lg transition-colors flex-shrink-0 ${isDark ? 'hover:bg-gray-700/60' : 'hover:bg-slate-100'}`}
           aria-label="Toggle sidebar"
         >
           ☰
@@ -62,10 +62,10 @@ export default function Sidebar() {
               ${
                 isActive(item.href, pathname)
                   ? isDark
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600/90 text-white shadow-sm'
                     : 'bg-blue-100 text-blue-700'
                   : isDark
-                    ? 'text-slate-300 hover:bg-slate-800'
+                    ? 'text-gray-300 hover:bg-gray-700/60'
                     : 'text-slate-600 hover:bg-slate-100'
               }
             `}
@@ -84,13 +84,13 @@ export default function Sidebar() {
       </nav>
 
       {/* Dark mode toggle at bottom */}
-      <div className={`sidebar-footer ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
+      <div className={`sidebar-footer ${isDark ? 'border-gray-700' : 'border-slate-200'}`}>
         <button
           onClick={toggleTheme}
           className={`
             sidebar-item w-full
             ${isDark
-              ? 'text-slate-300 hover:bg-slate-800'
+              ? 'text-gray-300 hover:bg-gray-700/60'
               : 'text-slate-600 hover:bg-slate-100'
             }
           `}
