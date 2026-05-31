@@ -1,0 +1,453 @@
+/* Dark Mode Theme - Premium Fintech Dark */
+
+@layer components {
+  /* Page Background - Dark */
+  html.dark .page-bg {
+    background: linear-gradient(to bottom right, var(--surface-page-from), var(--surface-page-to));
+  }
+
+  /* Sidebar - Dark */
+  html.dark .sidebar {
+    background-color: var(--surface-sidebar);
+    border-color: var(--border-primary);
+  }
+
+  html.dark .sidebar-item {
+    color: var(--text-tertiary);
+  }
+
+  html.dark .sidebar-item:hover {
+    background-color: var(--sidebar-bg-hover);
+    color: var(--sidebar-text-hover);
+  }
+
+  html.dark .sidebar-item-active {
+    background-color: var(--sidebar-bg-active);
+    color: var(--sidebar-text-active);
+  }
+
+  /* Card Base - Dark */
+  html.dark .card {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-card);
+  }
+
+  html.dark .card-elevated {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* KPI Card - Dark */
+  html.dark .kpi-card {
+    border-color: var(--border-primary);
+    background-color: var(--surface-card);
+  }
+
+  html.dark .kpi-income {
+    background: linear-gradient(to bottom right, var(--kpi-income-from), var(--kpi-income-to));
+    border-color: rgb(16 185 129 / 0.3);
+  }
+
+  html.dark .kpi-expenses {
+    background: linear-gradient(to bottom right, var(--kpi-expenses-from), var(--kpi-expenses-to));
+    border-color: rgb(168 85 247 / 0.3);
+  }
+
+  html.dark .kpi-accounts {
+    background: linear-gradient(to bottom right, var(--kpi-accounts-from), var(--kpi-accounts-to));
+    border-color: rgb(139 92 246 / 0.3);
+  }
+
+  html.dark .kpi-goals {
+    background: linear-gradient(to bottom right, var(--kpi-goals-from), var(--kpi-goals-to));
+    border-color: rgb(147 51 234 / 0.3);
+  }
+
+  html.dark .kpi-budget {
+    background: linear-gradient(to bottom right, var(--kpi-budget-from), var(--kpi-budget-to));
+    border-color: rgb(59 130 246 / 0.3);
+  }
+
+  html.dark .kpi-title {
+    color: var(--text-secondary);
+  }
+
+  html.dark .kpi-amount {
+    color: var(--text-primary);
+  }
+
+  /* Stat Card - Dark */
+  html.dark .stat-card {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+  }
+
+  html.dark .stat-card-title {
+    color: var(--text-secondary);
+  }
+
+  html.dark .stat-card-amount {
+    color: var(--text-primary);
+  }
+
+  /* Table - Dark */
+  html.dark .table-wrapper {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-card);
+  }
+
+  html.dark .table-container {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+  }
+
+  html.dark .table-header {
+    background-color: rgb(51 65 85 / 0.6);
+    border-color: var(--border-primary);
+  }
+
+  html.dark .table-head {
+    background-color: rgb(51 65 85 / 0.6);
+    border-color: var(--border-primary);
+  }
+
+  html.dark .table-header-cell {
+    color: var(--text-secondary);
+  }
+
+  html.dark .table-th {
+    color: var(--text-secondary);
+  }
+
+  html.dark .table-row {
+    border-color: var(--border-primary);
+  }
+
+  html.dark .table-tr {
+    border-color: var(--border-primary);
+  }
+
+  html.dark .table-row:hover {
+    background-color: rgb(59 130 246 / 0.15);
+  }
+
+  html.dark .table-tr:hover {
+    background-color: rgb(59 130 246 / 0.15);
+  }
+
+  html.dark .table-cell {
+    color: var(--text-secondary);
+  }
+
+  html.dark .table-td {
+    color: var(--text-secondary);
+  }
+
+  /* Input/Form - Dark */
+  html.dark .input-base {
+    background-color: var(--surface-input);
+    border-color: var(--border-input);
+    color: var(--text-primary);
+  }
+
+  html.dark .input-base:hover {
+    border-color: rgb(148 163 184 / 0.4);
+  }
+
+  html.dark .input-base:focus {
+    ring-color: rgb(59 130 246 / 0.5);
+    border-color: rgb(59 130 246 / 0.5);
+  }
+
+  html.dark .input-label {
+    color: var(--text-secondary);
+  }
+
+  html.dark .form-input {
+    background-color: var(--surface-input);
+    border-color: var(--border-input);
+    color: var(--text-primary);
+  }
+
+  html.dark .form-input:hover {
+    border-color: rgb(148 163 184 / 0.4);
+  }
+
+  html.dark .form-input:focus {
+    ring-color: rgb(59 130 246 / 0.5);
+    border-color: rgb(59 130 246 / 0.5);
+  }
+
+  html.dark .form-label {
+    color: var(--text-secondary);
+  }
+
+  html.dark .filter-input {
+    background-color: var(--surface-input);
+    border-color: var(--border-input);
+    color: var(--text-primary);
+  }
+
+  html.dark .filter-input:focus {
+    ring-color: rgb(59 130 246 / 0.5);
+    border-color: rgb(59 130 246 / 0.5);
+  }
+
+  html.dark .form-card {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Button - Dark */
+  html.dark .button-primary {
+    background-color: rgb(59 130 246 / 1);
+  }
+
+  html.dark .button-primary:hover {
+    background-color: rgb(37 99 235 / 1);
+  }
+
+  html.dark .button-secondary {
+    background-color: rgb(100 116 139 / 1);
+  }
+
+  html.dark .button-secondary:hover {
+    background-color: rgb(71 85 105 / 1);
+  }
+
+  html.dark .button-danger {
+    background-color: rgb(220 38 38 / 1);
+  }
+
+  html.dark .button-danger:hover {
+    background-color: rgb(185 28 28 / 1);
+  }
+
+  /* Badge - Dark */
+  html.dark .badge-income {
+    background-color: var(--badge-income);
+    color: var(--badge-income-text);
+  }
+
+  html.dark .badge-expense {
+    background-color: var(--badge-expense);
+    color: var(--badge-expense-text);
+  }
+
+  html.dark .badge-transfer {
+    background-color: var(--badge-transfer);
+    color: var(--badge-transfer-text);
+  }
+
+  html.dark .badge-payment {
+    background-color: var(--badge-payment);
+    color: var(--badge-payment-text);
+  }
+
+  html.dark .badge-draft {
+    background-color: var(--status-draft);
+    color: var(--status-draft-text);
+  }
+
+  html.dark .badge-posted {
+    background-color: var(--status-posted);
+    color: var(--status-posted-text);
+  }
+
+  /* Tinted Sections - Dark */
+  html.dark .section-info {
+    background-color: rgb(15 23 42 / 0.8);
+    border-color: rgb(59 130 246 / 0.3);
+  }
+
+  html.dark .section-info-text {
+    color: rgb(147 197 253 / 1);
+  }
+
+  html.dark .section-warning {
+    background-color: rgb(78 65 12 / 0.6);
+    border-color: rgb(217 119 6 / 0.3);
+  }
+
+  html.dark .section-warning-text {
+    color: rgb(253 224 71 / 1);
+  }
+
+  html.dark .section-success {
+    background-color: rgb(6 78 59 / 0.6);
+    border-color: rgb(16 185 129 / 0.3);
+  }
+
+  html.dark .section-success-text {
+    color: rgb(134 239 172 / 1);
+  }
+
+  html.dark .section-error {
+    background-color: rgb(127 29 29 / 0.6);
+    border-color: rgb(248 113 113 / 0.3);
+  }
+
+  html.dark .section-error-text {
+    color: rgb(252 165 165 / 1);
+  }
+
+  /* Panel - Dark */
+  html.dark .panel {
+    background-color: var(--surface-elevated);
+    border-color: var(--border-subtle);
+  }
+
+  /* Section Panel - Dark */
+  html.dark .section-panel {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-card);
+  }
+
+  html.dark .section-title {
+    color: var(--text-primary);
+  }
+
+  /* Empty State - Dark */
+  html.dark .empty-state {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-card);
+  }
+
+  html.dark .empty-state-title {
+    color: var(--text-primary);
+  }
+
+  html.dark .empty-state-text {
+    color: var(--text-tertiary);
+  }
+
+  /* Link - Dark */
+  html.dark .link-primary {
+    color: rgb(147 197 253 / 1);
+  }
+
+  html.dark .link-primary:hover {
+    color: rgb(96 165 250 / 1);
+  }
+
+  html.dark .link-secondary {
+    color: rgb(148 163 184 / 1);
+  }
+
+  html.dark .link-secondary:hover {
+    color: rgb(203 213 225 / 1);
+  }
+
+  html.dark .link-success {
+    color: rgb(134 239 172 / 1);
+  }
+
+  html.dark .link-success:hover {
+    color: rgb(74 222 128 / 1);
+  }
+
+  html.dark .link-danger {
+    color: rgb(252 165 165 / 1);
+  }
+
+  html.dark .link-danger:hover {
+    color: rgb(248 113 113 / 1);
+  }
+
+  /* Modal - Dark */
+  html.dark .modal-backdrop {
+    background-color: rgb(0 0 0 / 0.6);
+  }
+
+  html.dark .modal-content {
+    background-color: var(--surface-card);
+    border-color: var(--border-primary);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.4);
+  }
+
+  html.dark .modal-header {
+    color: var(--text-primary);
+  }
+
+  /* Progress Bar - Dark */
+  html.dark .progress-bar {
+    background-color: rgb(51 65 85 / 1);
+  }
+
+  html.dark .progress-fill {
+    background-color: rgb(59 130 246 / 1);
+  }
+
+  html.dark .progress-label-text {
+    color: var(--text-secondary);
+  }
+
+  html.dark .progress-amount {
+    color: var(--text-primary);
+  }
+
+  /* Skeleton - Dark */
+  html.dark .skeleton {
+    background-color: rgb(51 65 85 / 1);
+  }
+
+  /* Tooltip - Dark */
+  html.dark .tooltip {
+    background-color: rgb(30 41 59 / 1);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+  }
+
+  /* Icon Button - Dark */
+  html.dark .icon-button-primary {
+    color: rgb(147 197 253 / 1);
+  }
+
+  html.dark .icon-button-primary:hover {
+    color: rgb(96 165 250 / 1);
+  }
+
+  html.dark .icon-button-secondary {
+    color: rgb(148 163 184 / 1);
+  }
+
+  html.dark .icon-button-secondary:hover {
+    color: rgb(203 213 225 / 1);
+  }
+
+  html.dark .icon-button-success {
+    color: rgb(134 239 172 / 1);
+  }
+
+  html.dark .icon-button-success:hover {
+    color: rgb(74 222 128 / 1);
+  }
+
+  html.dark .icon-button-danger {
+    color: rgb(252 165 165 / 1);
+  }
+
+  html.dark .icon-button-danger:hover {
+    color: rgb(248 113 113 / 1);
+  }
+
+  /* Divider - Dark */
+  html.dark .divider {
+    border-color: var(--border-primary);
+  }
+
+  html.dark .divider-text::before,
+  html.dark .divider-text::after {
+    border-color: var(--border-primary);
+  }
+
+  html.dark .divider-text-label {
+    color: var(--text-muted);
+  }
+}

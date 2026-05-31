@@ -26,19 +26,16 @@ export default function Sidebar() {
   return (
     <aside
       className={`
-        hidden md:flex flex-col
-        bg-slate-900 text-white
-        transition-[width] duration-300 ease-in-out overflow-hidden
+        sidebar-wrapper
         ${isCollapsed ? 'w-16' : 'w-60'}
-        min-h-screen shrink-0
-        border-r border-slate-700
+        ${isDark ? 'bg-slate-900 text-white border-slate-700' : 'bg-white text-gray-900 border-slate-200'}
       `}
     >
       {/* Header: hamburger + logo */}
-      <div className="flex items-center h-16 px-3 border-b border-slate-700">
+      <div className={`sidebar-header ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 rounded-lg hover:bg-slate-800 transition-colors flex-shrink-0"
+          className={`p-2 rounded-lg transition-colors flex-shrink-0 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
           aria-label="Toggle sidebar"
         >
           ☰
@@ -55,25 +52,28 @@ export default function Sidebar() {
       </div>
 
       {/* Nav items */}
-      <nav className="flex-1 px-2 py-4 space-y-1">
+      <nav className={`sidebar-nav ${isDark ? '' : ''}`}>
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             className={`
-              flex items-center gap-3 px-2 py-2.5 rounded-lg transition-colors
+              sidebar-item
               ${
                 isActive(item.href, pathname)
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  ? isDark
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-blue-100 text-blue-700'
+                  : isDark
+                    ? 'text-slate-300 hover:bg-slate-800'
+                    : 'text-slate-600 hover:bg-slate-100'
               }
             `}
           >
-            <span className="text-xl flex-shrink-0">{item.icon}</span>
+            <span className="sidebar-icon">{item.icon}</span>
             <span
               className={`
-                text-sm font-medium whitespace-nowrap overflow-hidden
-                transition-opacity duration-200
+                sidebar-label
                 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}
               `}
             >
@@ -84,23 +84,24 @@ export default function Sidebar() {
       </nav>
 
       {/* Dark mode toggle at bottom */}
-      <div className="px-2 py-4 border-t border-slate-700">
+      <div className={`sidebar-footer ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
         <button
           onClick={toggleTheme}
           className={`
-            flex items-center gap-3 w-full px-2 py-2.5 rounded-lg
-            text-slate-300 hover:bg-slate-800 hover:text-white transition-colors
+            sidebar-item w-full
+            ${isDark
+              ? 'text-slate-300 hover:bg-slate-800'
+              : 'text-slate-600 hover:bg-slate-100'
+            }
           `}
         >
-          <span className="text-xl flex-shrink-0">{isDark ? '☀️' : '🌙'}</span>
+          <span className="sidebar-icon">{isDark ? '🌙' : '☀️'}</span>
           <span
             className={`
-              text-sm font-medium whitespace-nowrap overflow-hidden
-              transition-opacity duration-200
+              sidebar-label
               ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}
             `}
           >
-            {isDark ? 'Light Mode' : 'Dark Mode'}
           </span>
         </button>
       </div>

@@ -1,0 +1,148 @@
+/* Design Tokens - Reusable values across light and dark modes */
+
+:root {
+  /* Light Mode - Primary Surfaces - Premium Fintech */
+  --surface-page-from: theme('colors.white');
+  --surface-page-to: rgb(240 248 255 / 0.6);
+  --surface-card: theme('colors.white');
+  --surface-elevated: rgb(249 250 252 / 1);
+  --surface-sidebar: theme('colors.white');
+  --surface-input: rgb(249 250 252 / 1);
+
+  /* Light Mode - Borders - Softer, more premium */
+  --border-primary: rgb(226 232 240 / 0.8);
+  --border-subtle: rgb(226 232 240 / 0.5);
+  --border-input: rgb(203 213 225 / 0.8);
+
+  /* Light Mode - Text */
+  --text-primary: rgb(23 37 64 / 1);
+  --text-secondary: rgb(71 85 105 / 1);
+  --text-tertiary: rgb(100 116 139 / 1);
+  --text-muted: rgb(148 163 184 / 1);
+
+  /* Light Mode - Sidebar */
+  --sidebar-bg: theme('colors.white');
+  --sidebar-border: rgb(226 232 240 / 0.6);
+  --sidebar-text-active: rgb(59 130 246 / 1);
+  --sidebar-bg-active: rgb(59 130 246 / 0.1);
+  --sidebar-bg-hover: rgb(240 248 255 / 1);
+  --sidebar-text-hover: rgb(30 41 59 / 1);
+
+  /* Shadows - Soft, premium */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px 0 rgb(0 0 0 / 0.04);
+
+  /* KPI Card Gradients - Light Mode - Rich, Premium */
+  --kpi-income-from: rgb(255 255 255 / 1);
+  --kpi-income-to: rgb(167 243 208 / 0.85);
+  --kpi-expenses-from: rgb(255 255 255 / 1);
+  --kpi-expenses-to: rgb(254 205 211 / 0.85);
+  --kpi-accounts-from: rgb(255 255 255 / 1);
+  --kpi-accounts-to: rgb(186 230 253 / 0.85);
+  --kpi-goals-from: rgb(255 255 255 / 1);
+  --kpi-goals-to: rgb(221 214 254 / 0.85);
+  --kpi-budget-from: rgb(255 255 255 / 1);
+  --kpi-budget-to: rgb(191 219 254 / 0.85);
+
+  /* Badge/Chip Colors - Premium */
+  --badge-income: rgb(236 253 245 / 1);
+  --badge-income-text: rgb(5 122 85 / 1);
+  --badge-expense: rgb(254 242 242 / 1);
+  --badge-expense-text: rgb(153 27 27 / 1);
+  --badge-transfer: rgb(240 249 255 / 1);
+  --badge-transfer-text: rgb(30 64 175 / 1);
+  --badge-payment: rgb(250 245 255 / 1);
+  --badge-payment-text: rgb(88 28 135 / 1);
+
+  /* Status Colors - Premium */
+  --status-draft: rgb(254 252 232 / 1);
+  --status-draft-text: rgb(120 53 15 / 1);
+  --status-posted: rgb(236 253 245 / 1);
+  --status-posted-text: rgb(5 122 85 / 1);
+}
+
+/* Dark Mode Tokens - Premium Fintech */
+html.dark {
+  --surface-page-from: rgb(15 23 42 / 1);
+  --surface-page-to: rgb(30 41 59 / 1);
+  --surface-card: rgb(30 41 59 / 1);
+  --surface-elevated: rgb(51 65 85 / 1);
+  --surface-sidebar: rgb(15 23 42 / 1);
+  --surface-input: rgb(51 65 85 / 1);
+
+  --border-primary: rgb(148 163 184 / 0.2);
+  --border-subtle: rgb(148 163 184 / 0.1);
+  --border-input: rgb(148 163 184 / 0.25);
+
+  --text-primary: rgb(241 245 250 / 1);
+  --text-secondary: rgb(203 213 225 / 1);
+  --text-tertiary: rgb(148 163 184 / 1);
+  --text-muted: rgb(100 116 139 / 1);
+
+  --sidebar-bg: rgb(15 23 42 / 1);
+  --sidebar-border: rgb(148 163 184 / 0.15);
+  --sidebar-text-active: rgb(147 197 253 / 1);
+  --sidebar-bg-active: rgb(59 130 246 / 0.25);
+  --sidebar-bg-hover: rgb(148 163 184 / 0.1);
+  --sidebar-text-hover: rgb(226 232 240 / 1);
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+
+  /* KPI Card Gradients - Dark Mode Premium */
+  --kpi-income-from: rgb(5 150 105 / 0.3);
+  --kpi-income-to: rgb(16 185 129 / 0.15);
+  --kpi-expenses-from: rgb(168 85 247 / 0.3);
+  --kpi-expenses-to: rgb(244 63 94 / 0.15);
+  --kpi-accounts-from: rgb(139 92 246 / 0.3);
+  --kpi-accounts-to: rgb(59 130 246 / 0.15);
+  --kpi-goals-from: rgb(147 51 234 / 0.3);
+  --kpi-goals-to: rgb(99 102 241 / 0.15);
+  --kpi-budget-from: rgb(59 130 246 / 0.3);
+  --kpi-budget-to: rgb(79 70 229 / 0.15);
+
+  --badge-income: rgb(16 185 129 / 0.25);
+  --badge-income-text: rgb(134 239 172 / 1);
+  --badge-expense: rgb(244 63 94 / 0.25);
+  --badge-expense-text: rgb(252 165 165 / 1);
+  --badge-transfer: rgb(59 130 246 / 0.25);
+  --badge-transfer-text: rgb(147 197 253 / 1);
+  --badge-payment: rgb(147 51 234 / 0.25);
+  --badge-payment-text: rgb(216 180 254 / 1);
+
+  --status-draft: rgb(217 119 6 / 0.3);
+  --status-draft-text: rgb(253 224 71 / 1);
+  --status-posted: rgb(34 197 94 / 0.3);
+  --status-posted-text: rgb(134 239 172 / 1);
+}
+
+/* Typography Scale */
+.text-label {
+  @apply text-xs font-semibold uppercase tracking-wide;
+  color: var(--text-tertiary);
+}
+
+.text-heading-1 {
+  @apply text-3xl md:text-4xl font-bold;
+  color: var(--text-primary);
+}
+
+.text-heading-2 {
+  @apply text-2xl font-bold;
+  color: var(--text-primary);
+}
+
+.text-heading-3 {
+  @apply text-xl font-bold;
+  color: var(--text-primary);
+}
+
+.text-body {
+  @apply text-sm;
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}

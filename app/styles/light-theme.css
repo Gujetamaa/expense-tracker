@@ -1,0 +1,6 @@
+/* Light Mode Theme - Minimal overrides
+ * All component classes are now consolidated in components.css
+ * This file is reserved for light-mode-specific CSS variable overrides if needed
+ */
+
+/* Light mode is the default - CSS variables in tokens.css handle the theming */

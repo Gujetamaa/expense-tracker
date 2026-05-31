@@ -13,47 +13,47 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
+    <div className="page-bg p-6 md:p-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Settings</h1>
+        <h1 className="heading-page mb-8">Settings</h1>
 
         {/* Salary Settings Info */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Salary Settings</h2>
+        <div className="form-card p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Salary Settings</h2>
 
           {salarySettings ? (
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Basic Monthly Salary:</span>
-                <span className="font-semibold text-gray-800">
+                <span className="text-gray-600 dark:text-gray-400">Basic Monthly Salary:</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200">
                   ₱{salarySettings.basicMonthlySalary.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Payroll Frequency:</span>
-                <span className="font-semibold text-gray-800">{salarySettings.payrollFrequency}</span>
+                <span className="text-gray-600 dark:text-gray-400">Payroll Frequency:</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200">{salarySettings.payrollFrequency}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Taxable Allowance:</span>
-                <span className="font-semibold text-gray-800">
+                <span className="text-gray-600 dark:text-gray-400">Taxable Allowance:</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200">
                   ₱{salarySettings.taxableAllowance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Non-Taxable Allowance:</span>
-                <span className="font-semibold text-gray-800">
+                <span className="text-gray-600 dark:text-gray-400">Non-Taxable Allowance:</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200">
                   ₱{salarySettings.nonTaxableAllowance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
           ) : (
-            <p className="text-gray-500">No salary settings configured. Go to Salary Calculator to set them up.</p>
+            <p className="text-gray-500 dark:text-gray-400">No salary settings configured. Go to Salary Calculator to set them up.</p>
           )}
 
           <div className="mt-4">
             <button
               onClick={handleClearData}
-              className="w-full bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-600 transition"
+              className="button-danger w-full"
             >
               Clear Salary Settings
             </button>
@@ -61,16 +61,16 @@ export default function SettingsPage() {
         </div>
 
         {/* App Info */}
-        <div className="bg-blue-50 rounded-lg shadow-md p-6 border border-blue-200">
-          <h2 className="text-xl font-bold text-blue-900 mb-4">About</h2>
+        <div className="section-info p-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-blue-300 mb-4">About</h2>
 
-          <div className="space-y-3 text-sm text-blue-800">
+          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
             <p>
               <strong>Personal Finance Tracker</strong>
             </p>
             <p>A local-first personal finance tracker for Philippine users with salary calculations and savings goal tracking.</p>
 
-            <div className="mt-4 pt-4 border-t border-blue-200 space-y-2">
+            <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700/40 space-y-2">
               <p>
                 <strong>Features:</strong>
               </p>
@@ -82,7 +82,7 @@ export default function SettingsPage() {
               </ul>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-blue-200">
+            <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700/40">
               <p className="text-xs">Built with Next.js, TypeScript, and Tailwind CSS</p>
             </div>
           </div>

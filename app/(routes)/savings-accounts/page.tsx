@@ -5,6 +5,7 @@ import { SavingsAccount } from '@/types';
 import { getSavingsAccounts, saveSavingsAccount, updateSavingsAccount, deleteSavingsAccount } from '@/lib/storage';
 import SavingsAccountForm from '@/components/SavingsAccountForm';
 import SavingsAccountCard from '@/components/SavingsAccountCard';
+import StatCard from '@/components/StatCard';
 
 export default function SavingsAccountsPage() {
   const [accounts, setAccounts] = useState<SavingsAccount[]>([]);
@@ -146,13 +147,11 @@ export default function SavingsAccountsPage() {
   const totalTarget = accounts.reduce((sum, acc) => sum + acc.targetBalance, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
+    <div className="page-bg p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Savings Accounts
-          </h1>
+        <div className="page-header">
+          <h1 className="heading-page">Savings Accounts</h1>
           <div className="flex gap-2">
             {accounts.length > 0 && (
               <>
@@ -160,13 +159,13 @@ export default function SavingsAccountsPage() {
                   <>
                     <button
                       onClick={() => setEditMode(false)}
-                      className="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition"
+                      className="button-primary bg-green-600 hover:bg-green-700"
                     >
                       ✓ Done
                     </button>
                     <button
                       onClick={handleCancelReorder}
-                      className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                      className="button-secondary"
                     >
                       ✕ Cancel
                     </button>
@@ -174,7 +173,7 @@ export default function SavingsAccountsPage() {
                 ) : (
                   <button
                     onClick={handleEditMode}
-                    className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                    className="button-secondary"
                   >
                     ✎ Edit Order
                   </button>
@@ -187,7 +186,7 @@ export default function SavingsAccountsPage() {
                   setEditingAccount(null);
                   setShowForm(!showForm);
                 }}
-                className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+                className="button-primary"
               >
                 {showForm ? '✕ Close' : '+ Add Account'}
               </button>
@@ -196,22 +195,29 @@ export default function SavingsAccountsPage() {
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Total Balance</p>
-            <p className="text-3xl font-bold text-blue-600 mt-2">
-              ₱{totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Total Target</p>
-            <p className="text-3xl font-bold text-green-600 mt-2">
-              ₱{totalTarget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Accounts</p>
-            <p className="text-3xl font-bold text-purple-600 mt-2">{accounts.length}</p>
+        <div className="grid-cols-2-responsive mb-8">
+          <StatCard
+            title="Total Balance"
+            amount={totalBalance}
+            icon="💰"
+            bgColor="kpi-income border-blue-200 dark:border-blue-700/60"
+            textColor="text-blue-700 dark:text-blue-300"
+          />
+          <StatCard
+            title="Total Target"
+            amount={totalTarget}
+            icon="🎯"
+            bgColor="kpi-expenses border-emerald-200 dark:border-emerald-700/60"
+            textColor="text-emerald-700 dark:text-emerald-300"
+          />
+          <div className="kpi-accounts border border-violet-200 dark:border-violet-700/60 rounded-2xl p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm font-semibold">Accounts</p>
+                <p className="text-violet-700 dark:text-violet-300 text-2xl font-bold mt-2">{accounts.length}</p>
+              </div>
+              <span className="text-4xl opacity-80">📊</span>
+            </div>
           </div>
         </div>
 
@@ -228,7 +234,7 @@ export default function SavingsAccountsPage() {
 
         {/* Accounts Grid */}
         {accounts.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
+          <div className="empty-state p-12">
             <p className="text-gray-500 text-lg">
               No savings accounts yet. Create one to start tracking your savings!
             </p>

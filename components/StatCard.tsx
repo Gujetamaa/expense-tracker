@@ -8,15 +8,15 @@ interface StatCardProps {
 
 export default function StatCard({ title, amount, icon, bgColor, textColor }: StatCardProps) {
   return (
-    <div className={`${bgColor} rounded-lg p-6 shadow-md border`}>
+    <div className={`${bgColor} rounded-2xl p-6 border transition-all duration-200 hover:shadow-md`}>
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-600 text-sm font-semibold">{title}</p>
-          <p className={`${textColor} text-2xl font-bold mt-2`}>
-            ₱{amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        <div className="flex-1">
+          <p className="label-md text-gray-600 dark:text-gray-400 uppercase">{title}</p>
+          <p className={`${textColor} text-value-md mt-3 tracking-tight`}>
+            ₱<span className="font-black">{amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </p>
         </div>
-        <span className="text-4xl">{icon}</span>
+        <span className="text-5xl opacity-75 ml-4 flex-shrink-0">{icon}</span>
       </div>
     </div>
   );

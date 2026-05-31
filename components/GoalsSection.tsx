@@ -33,14 +33,14 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
 
   if (goals.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-12 text-center border border-gray-200">
-        <p className="text-2xl font-bold text-gray-800 mb-2">No goals yet</p>
-        <p className="text-gray-600 mb-6">
+      <div className="empty-state p-12">
+        <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No goals yet</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
           Create your first goal like PC Fund, Emergency Fund, Running Shoes, or Steam Deck.
         </p>
         <button
           onClick={onAddGoal}
-          className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+          className="button-primary"
         >
           + Add Goal
         </button>
@@ -61,25 +61,25 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
   return (
     <div className="space-y-6">
       {/* Header with Toggle */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Goals</h2>
-        <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+      <div className="section-title">
+        <h2 className="heading-section">Goals</h2>
+        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/60 rounded-lg p-1">
           <button
             onClick={() => handleViewModeChange('card')}
-            className={`px-4 py-2 rounded font-semibold transition ${
+            className={`px-4 py-2 rounded-md font-medium transition ${
               viewMode === 'card'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-800'
+                ? 'bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'
             }`}
           >
             Cards
           </button>
           <button
             onClick={() => handleViewModeChange('list')}
-            className={`px-4 py-2 rounded font-semibold transition ${
+            className={`px-4 py-2 rounded-md font-medium transition ${
               viewMode === 'list'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-800'
+                ? 'bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'
             }`}
           >
             List
@@ -88,8 +88,8 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
       </div>
 
       {/* Summary */}
-      <div className="bg-blue-50 rounded-lg shadow-sm p-4 border border-blue-200">
-        <p className="text-sm text-blue-700">
+      <div className="section-info p-4 rounded-xl">
+        <p className="section-info-text text-sm">
           <strong>{goals.length} goal{goals.length !== 1 ? 's' : ''}</strong> •
           <strong className="ml-2">₱{totalSavedAcrossGoals.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} saved</strong>
         </p>
@@ -104,7 +104,7 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
 
             return (
               <div key={priority}>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
                   Priority {priority === 'High' ? '1 / High' : priority === 'Medium' ? '2 / Medium' : '3 / Low'}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -125,18 +125,18 @@ export default function GoalsSection({ goals, accounts, onEdit, onDelete, onAddG
 
       {/* List View */}
       {viewMode === 'list' && (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+        <div className="table-wrapper">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-100 border-b border-gray-200">
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Goal</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Priority</th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Progress</th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">%</th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Remaining</th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Target Date</th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                <tr className="table-header">
+                  <th className="table-header-cell">Goal</th>
+                  <th className="table-header-cell">Priority</th>
+                  <th className="table-header-cell text-right">Progress</th>
+                  <th className="table-header-cell text-right">%</th>
+                  <th className="table-header-cell text-right">Remaining</th>
+                  <th className="table-header-cell text-center">Target Date</th>
+                  <th className="table-header-cell text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>

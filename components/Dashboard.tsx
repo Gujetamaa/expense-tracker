@@ -130,30 +130,30 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
+    <div className="page-bg p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-0">Dashboard</h1>
+        <div className="page-header">
+          <h1 className="heading-page">Dashboard</h1>
           <button
             onClick={() => {
               setEditingTransaction(null);
               setShowForm(!showForm);
             }}
-            className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+            className="button-primary"
           >
             {showForm ? '✕ Close' : '+ Add Transaction'}
           </button>
         </div>
 
         {/* Month Selector */}
-        <div className="flex items-center gap-4 mb-8">
-          <label className="text-gray-700 font-semibold">Month:</label>
+        <div className="filter-group">
+          <label className="filter-label">Month:</label>
           <input
             type="month"
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="filter-input"
           />
         </div>
 
@@ -169,60 +169,60 @@ export default function Dashboard() {
         )}
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid-cols-5-responsive mb-8">
           <StatCard
             title="Total Income"
             amount={stats.totalIncome}
             icon="💰"
-            bgColor="bg-green-100 border-green-300"
-            textColor="text-green-700"
+            bgColor="kpi-income border-emerald-200 dark:border-emerald-700/60"
+            textColor="text-emerald-700 dark:text-emerald-300"
           />
           <StatCard
             title="Total Expenses"
             amount={stats.totalExpenses}
             icon="💸"
-            bgColor="bg-red-100 border-red-300"
-            textColor="text-red-700"
+            bgColor="kpi-expenses border-rose-200 dark:border-rose-700/60"
+            textColor="text-rose-700 dark:text-rose-300"
           />
           <StatCard
             title="In Accounts"
             amount={totalInAccounts}
             icon="🏦"
-            bgColor="bg-blue-100 border-blue-300"
-            textColor="text-blue-700"
+            bgColor="kpi-accounts border-blue-200 dark:border-blue-700/60"
+            textColor="text-blue-700 dark:text-blue-300"
           />
           <StatCard
             title="Goals Saved"
             amount={totalGoalsSaved}
             icon="🎯"
-            bgColor="bg-purple-100 border-purple-300"
-            textColor="text-purple-700"
+            bgColor="kpi-goals border-violet-200 dark:border-violet-700/60"
+            textColor="text-violet-700 dark:text-violet-300"
           />
           <StatCard
             title="Remaining Budget"
             amount={Math.max(stats.remainingBudget, 0)}
             icon="📊"
-            bgColor="bg-indigo-100 border-indigo-300"
-            textColor="text-indigo-700"
+            bgColor="kpi-budget border-indigo-200 dark:border-indigo-700/60"
+            textColor="text-indigo-700 dark:text-indigo-300"
           />
         </div>
 
         {/* Pending Drafts Summary */}
         {draftTransactions.length > 0 && (
-          <div className="mb-8 bg-amber-50 rounded-lg shadow-md p-6 border border-amber-200">
-            <h2 className="text-xl font-bold text-amber-900 mb-4">📝 Pending Drafts</h2>
+          <div className="section-warning mb-8">
+            <h2 className="text-xl font-bold section-warning-text mb-4">📝 Pending Drafts</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-white rounded-lg border border-amber-100">
-                <p className="text-xs font-semibold text-gray-600">Draft Transactions</p>
-                <p className="text-2xl font-bold text-amber-600 mt-1">{draftTransactions.length}</p>
+              <div className="p-4 bg-white dark:bg-slate-700/40 rounded-xl border border-amber-200 dark:border-amber-700/40">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Draft Transactions</p>
+                <p className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">{draftTransactions.length}</p>
               </div>
-              <div className="p-4 bg-white rounded-lg border border-amber-100">
-                <p className="text-xs font-semibold text-gray-600">Pending Income</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">₱{draftIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <div className="p-4 bg-white dark:bg-slate-700/40 rounded-xl border border-green-200 dark:border-green-700/40">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Pending Income</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">₱{draftIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
               </div>
-              <div className="p-4 bg-white rounded-lg border border-amber-100">
-                <p className="text-xs font-semibold text-gray-600">Pending Expenses</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">₱{draftExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <div className="p-4 bg-white dark:bg-slate-700/40 rounded-xl border border-red-200 dark:border-red-700/40">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Pending Expenses</p>
+                <p className="text-2xl font-bold text-red-600 dark:text-red-400 mt-1">₱{draftExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
               </div>
             </div>
           </div>
@@ -230,33 +230,33 @@ export default function Dashboard() {
 
         {/* Credit Cards Section */}
         {creditCards.length > 0 && (
-          <div className="mb-8 bg-white rounded-lg shadow-md p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">Credit Cards Overview</h2>
+          <div className="section-panel mb-8">
+            <div className="section-title mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Credit Cards Overview</h2>
               <button
                 onClick={() => router.push('/credit-cards')}
-                className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition"
+                className="link-primary"
               >
                 View All →
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-xs font-semibold text-gray-600">Total Limit</p>
-                <p className="text-2xl font-bold text-blue-600 mt-1">
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-700/40">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Total Limit</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
                   ₱{totalCreditLimit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </p>
               </div>
-              <div className={`p-4 rounded-lg border ${totalCreditCardBalance < 0 ? 'bg-green-50 border-green-200' : totalCreditCardBalance > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'}`}>
-                <p className="text-xs font-semibold text-gray-600">Total Balance</p>
-                <p className={`text-2xl font-bold mt-1 ${totalCreditCardBalance < 0 ? 'text-green-600' : totalCreditCardBalance > 0 ? 'text-red-600' : 'text-gray-600'}`}>
+              <div className={`p-4 rounded-xl border ${totalCreditCardBalance < 0 ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40' : totalCreditCardBalance > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700/40' : 'bg-slate-50 dark:bg-slate-700/40 border-slate-200 dark:border-slate-700/40'}`}>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Total Balance</p>
+                <p className={`text-2xl font-bold mt-1 ${totalCreditCardBalance < 0 ? 'text-green-600 dark:text-green-400' : totalCreditCardBalance > 0 ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-400'}`}>
                   ₱{Math.abs(totalCreditCardBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                 </p>
-                <p className="text-xs text-gray-600 mt-1">{totalCreditCardBalance < 0 ? 'Surplus' : totalCreditCardBalance > 0 ? 'Outstanding' : 'Paid off'}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{totalCreditCardBalance < 0 ? 'Surplus' : totalCreditCardBalance > 0 ? 'Outstanding' : 'Paid off'}</p>
               </div>
-              <div className={`p-4 rounded-lg border ${cardsWithIssues > 0 ? 'bg-orange-50 border-orange-200' : 'bg-green-50 border-green-200'}`}>
-                <p className="text-xs font-semibold text-gray-600">Status</p>
-                <p className={`text-2xl font-bold mt-1 ${cardsWithIssues > 0 ? 'text-orange-600' : 'text-green-600'}`}>
+              <div className={`p-4 rounded-xl border ${cardsWithIssues > 0 ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-700/40' : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40'}`}>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Status</p>
+                <p className={`text-2xl font-bold mt-1 ${cardsWithIssues > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
                   {cardsWithIssues > 0 ? `${cardsWithIssues} card${cardsWithIssues !== 1 ? 's' : ''} need attention` : 'All good'}
                 </p>
               </div>
@@ -277,7 +277,7 @@ export default function Dashboard() {
 
         {/* Recent Transactions */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Recent Transactions</h2>
+          <h2 className="heading-section mb-4">Recent Transactions</h2>
           <TransactionList
             transactions={monthlyTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())}
             onEdit={handleEditTransaction}

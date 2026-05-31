@@ -5,6 +5,7 @@ import { CreditCard } from '@/types';
 import { getCreditCards, addCreditCard, updateCreditCard, deleteCreditCard } from '@/lib/storage';
 import CreditCardForm from '@/components/CreditCardForm';
 import CreditCardCard from '@/components/CreditCardCard';
+import StatCard from '@/components/StatCard';
 
 export default function CreditCardsPage() {
   const [cards, setCards] = useState<CreditCard[]>([]);
@@ -147,11 +148,11 @@ export default function CreditCardsPage() {
   const totalAvailableCredit = cards.reduce((sum, c) => sum + Math.max(c.creditLimit - Math.max(c.currentBalance, 0), 0), 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
+    <div className="page-bg p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Credit Cards</h1>
+        <div className="page-header">
+          <h1 className="heading-page">Credit Cards</h1>
           <div className="flex gap-2">
             {cards.length > 0 && (
               <>
@@ -159,13 +160,13 @@ export default function CreditCardsPage() {
                   <>
                     <button
                       onClick={() => setEditMode(false)}
-                      className="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition"
+                      className="button-primary bg-green-600 hover:bg-green-700"
                     >
                       ✓ Done
                     </button>
                     <button
                       onClick={handleCancelReorder}
-                      className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                      className="button-secondary"
                     >
                       ✕ Cancel
                     </button>
@@ -173,7 +174,7 @@ export default function CreditCardsPage() {
                 ) : (
                   <button
                     onClick={handleEditMode}
-                    className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                    className="button-secondary"
                   >
                     ✎ Edit Order
                   </button>
@@ -186,7 +187,7 @@ export default function CreditCardsPage() {
                   setEditingCard(null);
                   setShowForm(!showForm);
                 }}
-                className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+                className="button-primary"
               >
                 {showForm ? '✕ Close' : '+ Add Card'}
               </button>
@@ -195,28 +196,28 @@ export default function CreditCardsPage() {
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Total Credit Limit</p>
-            <p className="text-3xl font-bold text-blue-600 mt-2">
-              ₱{totalCreditLimit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Total Balance</p>
-            <p className={`text-3xl font-bold mt-2 ${totalBalance < 0 ? 'text-green-600' : totalBalance > 0 ? 'text-red-600' : 'text-gray-600'}`}>
-              ₱{Math.abs(totalBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              {totalBalance < 0 ? 'Credit Surplus' : totalBalance > 0 ? 'Outstanding' : 'No balance'}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Total Available Credit</p>
-            <p className="text-3xl font-bold text-green-600 mt-2">
-              ₱{totalAvailableCredit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-            </p>
-          </div>
+        <div className="grid-cols-2-responsive mb-8">
+          <StatCard
+            title="Total Credit Limit"
+            amount={totalCreditLimit}
+            icon="💳"
+            bgColor="kpi-accounts border-blue-200 dark:border-blue-700/60"
+            textColor="text-blue-700 dark:text-blue-300"
+          />
+          <StatCard
+            title="Total Balance"
+            amount={Math.abs(totalBalance)}
+            icon={totalBalance < 0 ? '✅' : totalBalance > 0 ? '⚠️' : '💰'}
+            bgColor="kpi-expenses border-rose-200 dark:border-rose-700/60"
+            textColor={totalBalance < 0 ? 'text-emerald-700 dark:text-emerald-300' : totalBalance > 0 ? 'text-rose-700 dark:text-rose-300' : 'text-slate-600 dark:text-slate-400'}
+          />
+          <StatCard
+            title="Available Credit"
+            amount={totalAvailableCredit}
+            icon="🎯"
+            bgColor="kpi-goals border-emerald-200 dark:border-emerald-700/60"
+            textColor="text-emerald-700 dark:text-emerald-300"
+          />
         </div>
 
         {/* Form */}
@@ -232,7 +233,7 @@ export default function CreditCardsPage() {
 
         {/* Credit Cards Grid */}
         {cards.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
+          <div className="empty-state p-12">
             <p className="text-gray-500 text-lg">No credit cards yet. Add one to start tracking!</p>
           </div>
         ) : (

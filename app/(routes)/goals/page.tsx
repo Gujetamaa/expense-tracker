@@ -6,6 +6,7 @@ import { getGoals, addGoal, updateGoal, deleteGoal, getSavingsAccounts } from '@
 import { getTopActiveGoals, sortGoalsByPriority } from '@/lib/goalHelpers';
 import GoalForm from '@/components/GoalForm';
 import GoalCard from '@/components/GoalCard';
+import StatCard from '@/components/StatCard';
 
 export default function GoalsPage() {
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -149,11 +150,11 @@ export default function GoalsPage() {
   const sortedGoals = sortGoalsByPriority(goals);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8">
+    <div className="page-bg p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Goals</h1>
+        <div className="page-header">
+          <h1 className="heading-page">Goals</h1>
           <div className="flex gap-2">
             {goals.length > 0 && (
               <>
@@ -161,13 +162,13 @@ export default function GoalsPage() {
                   <>
                     <button
                       onClick={() => setEditMode(false)}
-                      className="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition"
+                      className="button-primary bg-green-600 hover:bg-green-700"
                     >
                       ✓ Done
                     </button>
                     <button
                       onClick={handleCancelReorder}
-                      className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                      className="button-secondary"
                     >
                       ✕ Cancel
                     </button>
@@ -175,7 +176,7 @@ export default function GoalsPage() {
                 ) : (
                   <button
                     onClick={handleEditMode}
-                    className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                    className="button-secondary"
                   >
                     ✎ Edit Order
                   </button>
@@ -188,7 +189,7 @@ export default function GoalsPage() {
                   setEditingGoal(null);
                   setShowForm(!showForm);
                 }}
-                className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+                className="button-primary"
               >
                 {showForm ? '✕ Close' : '+ Add Goal'}
               </button>
@@ -197,22 +198,31 @@ export default function GoalsPage() {
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Total Saved</p>
-            <p className="text-3xl font-bold text-blue-600 mt-2">
-              ₱{totalSaved.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Active Goals</p>
-            <p className="text-3xl font-bold text-green-600 mt-2">{goals.length}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm font-semibold">Top Priority</p>
-            <p className="text-lg font-bold text-purple-600 mt-2">
-              {topGoals.length > 0 ? topGoals[0].name : '—'}
-            </p>
+        <div className="grid-cols-2-responsive mb-8">
+          <StatCard
+            title="Total Saved"
+            amount={totalSaved}
+            icon="💰"
+            bgColor="kpi-income border-blue-200 dark:border-blue-700/60"
+            textColor="text-blue-700 dark:text-blue-300"
+          />
+          <StatCard
+            title="Active Goals"
+            amount={goals.length}
+            icon="🎯"
+            bgColor="kpi-expenses border-emerald-200 dark:border-emerald-700/60"
+            textColor="text-emerald-700 dark:text-emerald-300"
+          />
+          <div className="kpi-goals border border-violet-200 dark:border-violet-700/60 rounded-2xl p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm font-semibold">Top Priority</p>
+                <p className="text-violet-700 dark:text-violet-300 text-lg font-bold mt-2">
+                  {topGoals.length > 0 ? topGoals[0].name : '—'}
+                </p>
+              </div>
+              <span className="text-4xl opacity-80">⭐</span>
+            </div>
           </div>
         </div>
 
@@ -229,8 +239,8 @@ export default function GoalsPage() {
 
         {/* Goals Grid */}
         {goals.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <p className="text-gray-500 text-lg">No goals yet. Create one to start tracking!</p>
+          <div className="empty-state p-12">
+            <p className="text-gray-500 dark:text-slate-400 text-lg">No goals yet. Create one to start tracking!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
