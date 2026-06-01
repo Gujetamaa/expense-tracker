@@ -45,6 +45,8 @@ export interface Transaction {
   notes: string;
   createdAt: string;
   status: 'draft' | 'posted';
+  hasTransferFee?: boolean;
+  transferFeeAmount?: number;  
 }
 
 export interface SavingsAccount {
@@ -57,6 +59,8 @@ export interface SavingsAccount {
   notes: string;
   hasDebitCard?: boolean;
   createdAt: string;
+  hasBankTransfer?: boolean;
+  hasEWallet?: boolean;
 }
 
 export interface CreditCard {
